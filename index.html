@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="launcher">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>launcher · adaptive grid (fixed)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #000000;
+      --card: #111112;
+      --card-pressed: #1c1c1e;
+      --card-shadow: 0 0.5px 0.5px rgba(0,0,0,0.5), 0 1px 1.5px rgba(0,0,0,0.3);
+      --text: #f5f5f7;
+      --text-secondary: #8e8e93;
+      --text-muted: #6c6c70;
+      --search-bg: #0f0f10;
+      --search-focus: #1a1a1c;
+      --border-subtle: rgba(255,255,255,0.08);
+      --radius-card: 20px;
+      --radius-search: 12px;
+      --grid-gap: 14px;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      overscroll-behavior: none;
+    }
+
+    /* ===== MOBILE FIRST (2 columns, narrow) ===== */
+    .shell {
+      width: 100%;
+      max-width: 500px;
+      padding-top: calc(env(safe-area-inset-top) + 14px);
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: calc(env(safe-area-inset-bottom) + 28px);
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--grid-gap);
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    /* cards & typography (unchanged from original) */
+    .app {
+      aspect-ratio: 1 / 1;
+      background: var(--card);
+      border-radius: var(--radius-card);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 8px;
+      transition: transform 0.08s cubic-bezier(0.2,0.9,0.4,1.1), background 0.08s ease;
+      cursor: pointer;
+      box-shadow: var(--card-shadow);
+      position: relative;
+    }
+    .app:active {
+      transform: scale(0.95);
+      background: var(--card-pressed);
+    }
+    .emoji {
+      font-size: 48px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .label {
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 510;
+      line-height: 1.3;
+      color: #efeff4;
+      word-break: break-word;
+      padding: 0 6px;
+    }
+    /* skeleton, search, result-meta, footer – same as original */
+    .search-wrapper { position: relative; width: 100%; }
+    #search { width: 100%; height: 44px; border: 0.5px solid var(--border-subtle); background: var(--search-bg); color: var(--text); border-radius: var(--radius-search); padding: 0 42px 0 18px; font-size: 17px; }
+    .clear-search { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 24px; background: rgba(120,120,128,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; pointer-events: none; }
+    .clear-search.visible { opacity: 0.8; pointer-events: auto; }
+    .result-meta { margin-top: 16px; padding-top: 12px; border-top: 0.5px solid rgba(255,255,255,0.06); font-size: 13px; color: var(--text-secondary); display: flex; justify-content: space-between; }
+    .skeleton { background: #151518; position: relative; overflow: hidden; }
+    .skeleton::before { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.03) 50%, transparent 70%); animation: shimmer 0.9s ease-in-out infinite; }
+    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 0; }
+    .footer-meta { margin-top: 40px; display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-muted); }
+    .retry-btn { background: none; border: none; color: var(--text-secondary); font-size: 12px; text-decoration: underline; cursor: pointer; }
+    .pull-spinner { width: 14px; height: 14px; border: 1.5px solid rgba(110,110,115,0.5); border-top-color: var(--text-secondary); border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== DESKTOP & TABLET (wider, more columns) ===== */
+    /* No more conflicting landscape rule – desktop now works */
+
+    /* Small tablets / portrait (≥768px) -> 3 columns */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .shell { max-width: 860px; padding-left: 24px; padding-right: 24px; }
+      .grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .emoji { font-size: 52px; }
+      .label { font-size: 15px; }
+    }
+
+    /* Desktop & large tablets landscape (≥1024px) -> 4 columns */
+    @media (min-width: 1024px) {
+      .shell { max-width: 1280px; padding-left: 32px; padding-right: 32px; }
+      .grid { grid-template-columns: repeat(4, 1fr); gap: 22px; }
+      .app { padding: 24px 12px; }
+      .emoji { font-size: 58px; margin-bottom: 8px; }
+      .label { font-size: 16px; }
+      h1 { font-size: 32px; }
+      #search { height: 48px; font-size: 18px; }
+    }
+
+    /* Ultra-wide (≥1600px) -> 5 columns */
+    @media (min-width: 1600px) {
+      .shell { max-width: 1600px; padding-left: 48px; padding-right: 48px; }
+      .grid { grid-template-columns: repeat(5, 1fr); gap: 26px; }
+      .emoji { font-size: 64px; }
+      .label { font-size: 17px; }
+    }
+
+    /* Desktop hover (doesn't affect touch) */
+    @media (hover: hover) {
+      .app:hover { background: var(--card-pressed); transform: scale(0.97); transition: transform 0.1s, background 0.1s; }
+      .app:hover::after { opacity: 0.5; }
+    }
+
+    /* Keep original phone landscape behaviour (no width cap, just slightly bigger emoji) */
+    /* This only affects phones with width < 768px in landscape */
+    @media (max-width: 767px) and (orientation: landscape) {
+      .shell { max-width: 700px; }
+      .grid { gap: 18px; }
+      .emoji { font-size: 56px; }
+      .label { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <h1>launcher</h1>
+    <div class="search-wrapper">
+      <input id="search" type="text" placeholder="search tools" autocomplete="off" spellcheck="false">
+      <div class="clear-search" id="clearSearchBtn"><span>✕</span></div>
+    </div>
+    <div class="result-meta">
+      <span id="resultCount"></span>
+      <span id="updateCheck" class="update-check"></span>
+    </div>
+  </div>
+  <div id="apps" class="grid"></div>
+  <div class="footer-meta">
+    <span id="timestampText">—</span>
+    <div id="pullSpinner" class="pull-spinner"></div>
+    <button id="manualRetryBtn" class="retry-btn">retry</button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const USERNAME = "itsnotalwin";
+    const appsContainer = document.getElementById("apps");
+    const searchInput = document.getElementById("search");
+    const clearBtn = document.getElementById("clearSearchBtn");
+    const resultCountSpan = document.getElementById("resultCount");
+    const updateCheckSpan = document.getElementById("updateCheck");
+    const timestampSpan = document.getElementById("timestampText");
+    const pullSpinner = document.getElementById("pullSpinner");
+    const retryBtn = document.getElementById("manualRetryBtn");
+
+    let apps = [];
+    let isLoading = true;
+    let currentFilter = "";
+    let lastUpdated = null;
+    let lastFetchTime = 0;
+    let refreshingFromForeground = false;
+
+    function getCacheBustedUrl() {
+      return `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated&_=${Date.now()}`;
+    }
+
+    const emojiMap = {
+      tracker:"📊", clock:"⏰", customs:"🧾", dashboard:"📱", secrets:"🔐",
+      tools:"🛠️", notes:"📝", camera:"📷", music:"🎵", weather:"🌤️",
+      calc:"🧮", finance:"💳", budget:"💰", ai:"🤖", chat:"💬", task:"✅",
+      work:"💼", shipping:"🚚", map:"🗺️", portfolio:"🗂️", birthday:"🎂",
+      video:"🎬", game:"🎮", project:"📁"
+    };
+    const fallback = ["📦","🧩","⚙️","🗂️","📁","📌","🪐","🔧"];
+
+    function getEmoji(repoName) {
+      const lower = repoName.toLowerCase();
+      for (const [key, val] of Object.entries(emojiMap)) {
+        if (lower.includes(key)) return val;
+      }
+      let hash = 0;
+      for (let i = 0; i < repoName.length; i++) {
+        hash = ((hash << 5) - hash) + repoName.charCodeAt(i);
+        hash |= 0;
+      }
+      return fallback[Math.abs(hash) % fallback.length];
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+    }
+
+    function renderApps() {
+      if (isLoading) {
+        appsContainer.innerHTML = '';
+        for (let i = 0; i < 6; i++) {
+          const skeleton = document.createElement('div');
+          skeleton.className = 'app skeleton';
+          skeleton.innerHTML = '<div class="emoji">✨</div><div class="label"> </div>';
+          appsContainer.appendChild(skeleton);
+        }
+        resultCountSpan.innerText = '';
+        return;
+      }
+
+      const filter = currentFilter.trim().toLowerCase();
+      let filtered = filter ? apps.filter(a => a.name.toLowerCase().includes(filter)) : apps;
+      const total = filtered.length;
+
+      if (apps.length === 0) {
+        resultCountSpan.innerText = '';
+      } else if (!filter) {
+        resultCountSpan.innerText = `${total} ${total === 1 ? 'tool' : 'tools'}`;
+      } else {
+        resultCountSpan.innerText = `${total} matching`;
+      }
+
+      if (filtered.length === 0) {
+        appsContainer.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">${filter ? '🔍' : '📭'}</div>
+            <div class="empty-title">${filter ? 'no tools found' : 'no GitHub Pages apps'}</div>
+            <div class="empty-hint">${filter ? 'try a different keyword' : 'repositories with "Pages" enabled will appear here'}</div>
+          </div>
+        `;
+        return;
+      }
+
+      appsContainer.innerHTML = '';
+      for (const app of filtered) {
+        const card = document.createElement('a');
+        card.className = 'app';
+        card.href = app.url;
+        card.innerHTML = `<div class="emoji">${app.emoji}</div><div class="label">${escapeHtml(app.name)}</div>`;
+        card.addEventListener('touchstart', () => { if (navigator.vibrate) navigator.vibrate(5); });
+        appsContainer.appendChild(card);
+      }
+    }
+
+    function updateTimestamp() {
+      if (!lastUpdated) { timestampSpan.innerText = 'never'; return; }
+      const diff = Date.now() - lastUpdated;
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1) timestampSpan.innerText = 'just now';
+      else if (mins < 60) timestampSpan.innerText = `${mins} min ago`;
+      else if (mins < 1440) timestampSpan.innerText = `${Math.floor(mins / 60)} hr ago`;
+      else timestampSpan.innerText = 'today';
+    }
+
+    async function fetchApps(showSpinner = false, silent = false) {
+      if (showSpinner) pullSpinner.style.display = 'inline-block';
+      if (!silent) {
+        isLoading = true;
+        renderApps();
+      } else {
+        updateCheckSpan.innerText = 'checking...';
+      }
+
+      try {
+        const response = await fetch(getCacheBustedUrl(), { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const repos = await response.json();
+
+        const eligible = repos.filter(r => r.has_pages === true && !r.fork && !r.archived);
+        const parsed = eligible.map(repo => {
+          let displayName = repo.name.replace(/[-_]/g, ' ').trim();
+          displayName = displayName.replace(/\b\w/g, c => c.toUpperCase());
+          return { name: displayName, url: `https://${USERNAME}.github.io/${repo.name}/`, emoji: getEmoji(repo.name) };
+        });
+        parsed.sort((a, b) => a.name.localeCompare(b.name));
+        apps = parsed;
+        lastUpdated = Date.now();
+        lastFetchTime = Date.now();
+        updateTimestamp();
+        if (!silent) updateCheckSpan.innerText = '';
+        else updateCheckSpan.innerText = '✓ updated';
+        setTimeout(() => { if (updateCheckSpan.innerText === '✓ updated') updateCheckSpan.innerText = ''; }, 2000);
+      } catch (err) {
+        console.error(err);
+        if (!silent) {
+          apps = [];
+          appsContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">network error</div><div class="empty-hint">tap "retry"</div></div>`;
+        } else {
+          updateCheckSpan.innerText = '⚠️ failed';
+          setTimeout(() => { if (updateCheckSpan.innerText === '⚠️ failed') updateCheckSpan.innerText = ''; }, 2000);
+        }
+      } finally {
+        isLoading = false;
+        if (showSpinner) pullSpinner.style.display = 'none';
+        if (!silent) renderApps();
+        if (searchInput.value !== currentFilter) {
+          currentFilter = searchInput.value;
+          renderApps();
+        }
+      }
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      currentFilter = e.target.value;
+      if (!isLoading) renderApps();
+      clearBtn.classList.toggle('visible', currentFilter.length > 0);
+    });
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      currentFilter = '';
+      clearBtn.classList.remove('visible');
+      if (!isLoading) renderApps();
+      searchInput.focus();
+    });
+    retryBtn.addEventListener('click', () => fetchApps(true));
+
+    document.body.addEventListener('touchstart', (e) => {
+      if (!e.target.closest('.app') && e.target !== searchInput && !clearBtn.contains(e.target)) {
+        searchInput.blur();
+      }
+    });
+
+    let touchStartY = 0, pulling = false;
+    document.body.addEventListener('touchstart', (e) => {
+      if (window.scrollY <= 5) touchStartY = e.touches[0].clientY;
+    });
+    document.body.addEventListener('touchmove', (e) => {
+      if (touchStartY && e.touches[0].clientY - touchStartY > 60 && !isLoading) {
+        pulling = true;
+        e.preventDefault();
+        timestampSpan.innerText = 'release to refresh';
+      }
+    });
+    document.body.addEventListener('touchend', async () => {
+      if (pulling && !isLoading) {
+        pulling = false;
+        await fetchApps(true);
+        updateTimestamp();
+      }
+      touchStartY = 0;
+      pulling = false;
+    });
+
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) fetchApps(false, true);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && !isLoading && !refreshingFromForeground && (Date.now() - lastFetchTime > 30000)) {
+        refreshingFromForeground = true;
+        fetchApps(false, true).finally(() => refreshingFromForeground = false);
+      }
+    });
+
+    fetchApps(false);
+  })();
+</script>
+</body>
+</html>
