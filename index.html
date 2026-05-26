@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="launcher">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>launcher · adaptive grid (fixed)</title>
+  <title>launcher · smooth black‑grey gradient</title>
   <style>
     * {
       margin: 0;
@@ -17,46 +14,42 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* SIMPLE BLACK-GREY GRADIENT — no animation, no heavy shifts */
+    body {
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a1f 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      overscroll-behavior: none;
+      font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+    }
+
     :root {
-      --bg: #000000;
-      --card: #111112;
-      --card-pressed: #1c1c1e;
-      --card-shadow: 0 0.5px 0.5px rgba(0,0,0,0.5), 0 1px 1.5px rgba(0,0,0,0.3);
+      --card: rgba(17, 17, 18, 0.85);
+      --card-pressed: rgba(28, 28, 30, 0.95);
       --text: #f5f5f7;
       --text-secondary: #8e8e93;
       --text-muted: #6c6c70;
-      --search-bg: #0f0f10;
-      --search-focus: #1a1a1c;
+      --search-bg: rgba(15, 15, 16, 0.7);
+      --search-focus: rgba(26, 26, 28, 0.95);
       --border-subtle: rgba(255,255,255,0.08);
       --radius-card: 20px;
       --radius-search: 12px;
       --grid-gap: 14px;
     }
 
-    html, body {
-      width: 100%;
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      overscroll-behavior: none;
-    }
-
-    /* ===== MOBILE FIRST (2 columns, narrow) ===== */
+    /* LIGHTWEIGHT BLUR — only on shell, no heavy compositing */
     .shell {
       width: 100%;
       max-width: 500px;
+      margin: 0 auto;
       padding-top: calc(env(safe-area-inset-top) + 14px);
       padding-left: 20px;
       padding-right: 20px;
       padding-bottom: calc(env(safe-area-inset-bottom) + 28px);
-      margin: 0 auto;
+      backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 0;
     }
 
     .grid {
@@ -67,7 +60,6 @@
       margin-top: 20px;
     }
 
-    /* cards & typography (unchanged from original) */
     .app {
       aspect-ratio: 1 / 1;
       background: var(--card);
@@ -79,14 +71,21 @@
       justify-content: center;
       gap: 10px;
       padding: 16px 8px;
-      transition: transform 0.08s cubic-bezier(0.2,0.9,0.4,1.1), background 0.08s ease;
+      transition: transform 0.08s ease, background 0.08s ease;
       cursor: pointer;
-      box-shadow: var(--card-shadow);
-      position: relative;
+      box-shadow: 0 0.5px 0.5px rgba(0,0,0,0.5), 0 1px 1.5px rgba(0,0,0,0.3);
     }
     .app:active {
       transform: scale(0.95);
       background: var(--card-pressed);
+    }
+    /* desktop hover (no glow, just scale) */
+    @media (hover: hover) {
+      .app:hover {
+        transform: scale(0.97);
+        background: rgba(28, 28, 30, 0.95);
+        transition: all 0.1s ease;
+      }
     }
     .emoji {
       font-size: 48px;
@@ -103,65 +102,84 @@
       word-break: break-word;
       padding: 0 6px;
     }
-    /* skeleton, search, result-meta, footer – same as original */
+
     .search-wrapper { position: relative; width: 100%; }
-    #search { width: 100%; height: 44px; border: 0.5px solid var(--border-subtle); background: var(--search-bg); color: var(--text); border-radius: var(--radius-search); padding: 0 42px 0 18px; font-size: 17px; }
-    .clear-search { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 24px; background: rgba(120,120,128,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; pointer-events: none; }
+    #search {
+      width: 100%;
+      height: 44px;
+      border: 0.5px solid var(--border-subtle);
+      background: var(--search-bg);
+      color: var(--text);
+      border-radius: var(--radius-search);
+      padding: 0 42px 0 18px;
+      font-size: 17px;
+      transition: background 0.2s;
+    }
+    #search:focus {
+      background: var(--search-focus);
+      border-color: rgba(255,255,255,0.2);
+      outline: none;
+    }
+    .clear-search {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 24px;
+      background: rgba(120,120,128,0.6);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+    }
     .clear-search.visible { opacity: 0.8; pointer-events: auto; }
-    .result-meta { margin-top: 16px; padding-top: 12px; border-top: 0.5px solid rgba(255,255,255,0.06); font-size: 13px; color: var(--text-secondary); display: flex; justify-content: space-between; }
+
+    .result-meta {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 0.5px solid rgba(255,255,255,0.06);
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .random-btn {
+      background: rgba(120,120,128,0.2);
+      border: 0.5px solid rgba(255,255,255,0.2);
+      border-radius: 30px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #ddd;
+      cursor: pointer;
+      transition: 0.1s ease;
+    }
+    .random-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+
     .skeleton { background: #151518; position: relative; overflow: hidden; }
-    .skeleton::before { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.03) 50%, transparent 70%); animation: shimmer 0.9s ease-in-out infinite; }
+    .skeleton::before { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.03) 50%, transparent 70%); animation: shimmer 0.9s infinite; }
     @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
     .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 0; }
     .footer-meta { margin-top: 40px; display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-muted); }
     .retry-btn { background: none; border: none; color: var(--text-secondary); font-size: 12px; text-decoration: underline; cursor: pointer; }
     .pull-spinner { width: 14px; height: 14px; border: 1.5px solid rgba(110,110,115,0.5); border-top-color: var(--text-secondary); border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ===== DESKTOP & TABLET (wider, more columns) ===== */
-    /* No more conflicting landscape rule – desktop now works */
-
-    /* Small tablets / portrait (≥768px) -> 3 columns */
-    @media (min-width: 768px) and (max-width: 1023px) {
-      .shell { max-width: 860px; padding-left: 24px; padding-right: 24px; }
-      .grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
-      .emoji { font-size: 52px; }
-      .label { font-size: 15px; }
-    }
-
-    /* Desktop & large tablets landscape (≥1024px) -> 4 columns */
-    @media (min-width: 1024px) {
-      .shell { max-width: 1280px; padding-left: 32px; padding-right: 32px; }
-      .grid { grid-template-columns: repeat(4, 1fr); gap: 22px; }
-      .app { padding: 24px 12px; }
-      .emoji { font-size: 58px; margin-bottom: 8px; }
-      .label { font-size: 16px; }
-      h1 { font-size: 32px; }
-      #search { height: 48px; font-size: 18px; }
-    }
-
-    /* Ultra-wide (≥1600px) -> 5 columns */
-    @media (min-width: 1600px) {
-      .shell { max-width: 1600px; padding-left: 48px; padding-right: 48px; }
-      .grid { grid-template-columns: repeat(5, 1fr); gap: 26px; }
-      .emoji { font-size: 64px; }
-      .label { font-size: 17px; }
-    }
-
-    /* Desktop hover (doesn't affect touch) */
-    @media (hover: hover) {
-      .app:hover { background: var(--card-pressed); transform: scale(0.97); transition: transform 0.1s, background 0.1s; }
-      .app:hover::after { opacity: 0.5; }
-    }
-
-    /* Keep original phone landscape behaviour (no width cap, just slightly bigger emoji) */
-    /* This only affects phones with width < 768px in landscape */
-    @media (max-width: 767px) and (orientation: landscape) {
-      .shell { max-width: 700px; }
-      .grid { gap: 18px; }
-      .emoji { font-size: 56px; }
-      .label { font-size: 16px; }
-    }
+    /* desktop multi-column */
+    @media (min-width: 768px) and (max-width: 1023px) { .shell { max-width: 860px; } .grid { grid-template-columns: repeat(3, 1fr); gap: 18px; } .emoji { font-size: 52px; } }
+    @media (min-width: 1024px) { .shell { max-width: 1280px; padding-left: 32px; padding-right: 32px; } .grid { grid-template-columns: repeat(4, 1fr); gap: 22px; } .emoji { font-size: 58px; } .label { font-size: 16px; } }
+    @media (min-width: 1600px) { .shell { max-width: 1600px; } .grid { grid-template-columns: repeat(5, 1fr); gap: 26px; } .emoji { font-size: 64px; } }
+    @media (max-width: 767px) and (orientation: landscape) { .shell { max-width: 700px; } .emoji { font-size: 56px; } }
   </style>
 </head>
 <body>
@@ -169,12 +187,15 @@
   <div class="topbar">
     <h1>launcher</h1>
     <div class="search-wrapper">
-      <input id="search" type="text" placeholder="search tools" autocomplete="off" spellcheck="false">
+      <input id="search" type="text" placeholder="search tools" autocomplete="off">
       <div class="clear-search" id="clearSearchBtn"><span>✕</span></div>
     </div>
     <div class="result-meta">
       <span id="resultCount"></span>
-      <span id="updateCheck" class="update-check"></span>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <button id="randomBtn" class="random-btn">🎲 random site</button>
+        <span id="updateCheck" class="update-check"></span>
+      </div>
     </div>
   </div>
   <div id="apps" class="grid"></div>
@@ -196,6 +217,7 @@
     const timestampSpan = document.getElementById("timestampText");
     const pullSpinner = document.getElementById("pullSpinner");
     const retryBtn = document.getElementById("manualRetryBtn");
+    const randomBtn = document.getElementById("randomBtn");
 
     let apps = [];
     let isLoading = true;
@@ -203,6 +225,22 @@
     let lastUpdated = null;
     let lastFetchTime = 0;
     let refreshingFromForeground = false;
+
+    // Emoji overrides (still optional – kept from before, lightweight)
+    let emojiOverrides = {};
+    function loadEmojiOverrides() {
+      try {
+        const stored = localStorage.getItem("launcher_emoji_overrides");
+        if (stored) emojiOverrides = JSON.parse(stored);
+      } catch(e) {}
+    }
+    function saveEmojiOverrides() {
+      localStorage.setItem("launcher_emoji_overrides", JSON.stringify(emojiOverrides));
+    }
+    function getEmojiForApp(app) {
+      if (emojiOverrides[app.url]) return emojiOverrides[app.url];
+      return app.originalEmoji;
+    }
 
     function getCacheBustedUrl() {
       return `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated&_=${Date.now()}`;
@@ -217,7 +255,7 @@
     };
     const fallback = ["📦","🧩","⚙️","🗂️","📁","📌","🪐","🔧"];
 
-    function getEmoji(repoName) {
+    function getEmojiFromName(repoName) {
       const lower = repoName.toLowerCase();
       for (const [key, val] of Object.entries(emojiMap)) {
         if (lower.includes(key)) return val;
@@ -234,39 +272,37 @@
       return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
     }
 
+    function getFilteredApps() {
+      const filter = currentFilter.trim().toLowerCase();
+      if (!filter) return apps;
+      return apps.filter(a => a.name.toLowerCase().includes(filter));
+    }
+
     function renderApps() {
       if (isLoading) {
         appsContainer.innerHTML = '';
         for (let i = 0; i < 6; i++) {
-          const skeleton = document.createElement('div');
-          skeleton.className = 'app skeleton';
-          skeleton.innerHTML = '<div class="emoji">✨</div><div class="label"> </div>';
-          appsContainer.appendChild(skeleton);
+          const skel = document.createElement('div');
+          skel.className = 'app skeleton';
+          skel.innerHTML = '<div class="emoji">✨</div><div class="label"> </div>';
+          appsContainer.appendChild(skel);
         }
         resultCountSpan.innerText = '';
         return;
       }
 
-      const filter = currentFilter.trim().toLowerCase();
-      let filtered = filter ? apps.filter(a => a.name.toLowerCase().includes(filter)) : apps;
+      const filtered = getFilteredApps();
       const total = filtered.length;
-
       if (apps.length === 0) {
         resultCountSpan.innerText = '';
-      } else if (!filter) {
+      } else if (!currentFilter.trim()) {
         resultCountSpan.innerText = `${total} ${total === 1 ? 'tool' : 'tools'}`;
       } else {
         resultCountSpan.innerText = `${total} matching`;
       }
 
       if (filtered.length === 0) {
-        appsContainer.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">${filter ? '🔍' : '📭'}</div>
-            <div class="empty-title">${filter ? 'no tools found' : 'no GitHub Pages apps'}</div>
-            <div class="empty-hint">${filter ? 'try a different keyword' : 'repositories with "Pages" enabled will appear here'}</div>
-          </div>
-        `;
+        appsContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">${currentFilter ? '🔍' : '📭'}</div><div class="empty-title">${currentFilter ? 'no tools found' : 'no GitHub Pages apps'}</div><div class="empty-hint">${currentFilter ? 'try a different keyword' : 'repositories with "Pages" enabled will appear here'}</div></div>`;
         return;
       }
 
@@ -275,7 +311,18 @@
         const card = document.createElement('a');
         card.className = 'app';
         card.href = app.url;
-        card.innerHTML = `<div class="emoji">${app.emoji}</div><div class="label">${escapeHtml(app.name)}</div>`;
+        const displayEmoji = getEmojiForApp(app);
+        card.innerHTML = `<div class="emoji">${displayEmoji}</div><div class="label">${escapeHtml(app.name)}</div>`;
+        // double-click to change emoji (optional, but not choppy)
+        card.addEventListener('dblclick', (e) => {
+          e.preventDefault();
+          const newEmoji = prompt(`New emoji for "${app.name}"`, displayEmoji);
+          if (newEmoji && newEmoji.trim()) {
+            emojiOverrides[app.url] = newEmoji.trim();
+            saveEmojiOverrides();
+            renderApps();
+          }
+        });
         card.addEventListener('touchstart', () => { if (navigator.vibrate) navigator.vibrate(5); });
         appsContainer.appendChild(card);
       }
@@ -304,12 +351,15 @@
         const response = await fetch(getCacheBustedUrl(), { cache: 'no-store' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const repos = await response.json();
-
         const eligible = repos.filter(r => r.has_pages === true && !r.fork && !r.archived);
         const parsed = eligible.map(repo => {
           let displayName = repo.name.replace(/[-_]/g, ' ').trim();
           displayName = displayName.replace(/\b\w/g, c => c.toUpperCase());
-          return { name: displayName, url: `https://${USERNAME}.github.io/${repo.name}/`, emoji: getEmoji(repo.name) };
+          return {
+            name: displayName,
+            url: `https://${USERNAME}.github.io/${repo.name}/`,
+            originalEmoji: getEmojiFromName(repo.name)
+          };
         });
         parsed.sort((a, b) => a.name.localeCompare(b.name));
         apps = parsed;
@@ -339,6 +389,42 @@
       }
     }
 
+    // random global site (lightweight fetch)
+    async function fetchRandomGlobalPagesSite() {
+      const originalText = randomBtn.innerHTML;
+      randomBtn.innerHTML = '🌍 ...';
+      randomBtn.disabled = true;
+      try {
+        const searchUrl = `https://api.github.com/search/repositories?q=has_pages:true&per_page=30&sort=updated`;
+        const response = await fetch(searchUrl, { cache: 'no-store' });
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+        const totalCount = data.total_count;
+        if (totalCount === 0) throw new Error();
+        const maxPage = Math.min(33, Math.floor(totalCount / 30));
+        const randomPage = Math.floor(Math.random() * (maxPage + 1)) + 1;
+        const pageResp = await fetch(`https://api.github.com/search/repositories?q=has_pages:true&per_page=30&sort=updated&page=${randomPage}`, { cache: 'no-store' });
+        if (!pageResp.ok) throw new Error();
+        const pageData = await pageResp.json();
+        const repos = pageData.items;
+        if (!repos.length) throw new Error();
+        const randomRepo = repos[Math.floor(Math.random() * repos.length)];
+        const pagesUrl = `https://${randomRepo.owner.login}.github.io/${randomRepo.name}/`;
+        updateCheckSpan.innerText = `🎲 ${randomRepo.owner.login}/${randomRepo.name}`;
+        setTimeout(() => { if (updateCheckSpan.innerText.includes(randomRepo.owner.login)) updateCheckSpan.innerText = ''; }, 2500);
+        window.open(pagesUrl, '_blank');
+        if (navigator.vibrate) navigator.vibrate(10);
+      } catch (err) {
+        updateCheckSpan.innerText = '⚠️ failed';
+        setTimeout(() => { if (updateCheckSpan.innerText === '⚠️ failed') updateCheckSpan.innerText = ''; }, 2000);
+      } finally {
+        randomBtn.innerHTML = originalText;
+        randomBtn.disabled = false;
+      }
+    }
+
+    randomBtn.addEventListener('click', fetchRandomGlobalPagesSite);
+
     searchInput.addEventListener('input', (e) => {
       currentFilter = e.target.value;
       if (!isLoading) renderApps();
@@ -354,7 +440,7 @@
     retryBtn.addEventListener('click', () => fetchApps(true));
 
     document.body.addEventListener('touchstart', (e) => {
-      if (!e.target.closest('.app') && e.target !== searchInput && !clearBtn.contains(e.target)) {
+      if (!e.target.closest('.app') && e.target !== searchInput && !clearBtn.contains(e.target) && !randomBtn.contains(e.target)) {
         searchInput.blur();
       }
     });
@@ -380,10 +466,7 @@
       pulling = false;
     });
 
-    window.addEventListener('pageshow', (e) => {
-      if (e.persisted) fetchApps(false, true);
-    });
-
+    window.addEventListener('pageshow', (e) => { if (e.persisted) fetchApps(false, true); });
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden && !isLoading && !refreshingFromForeground && (Date.now() - lastFetchTime > 30000)) {
         refreshingFromForeground = true;
@@ -391,6 +474,7 @@
       }
     });
 
+    loadEmojiOverrides();
     fetchApps(false);
   })();
 </script>
