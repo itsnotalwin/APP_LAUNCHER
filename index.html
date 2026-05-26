@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="launcher">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>launcher · adaptive grid (fixed)</title>
+  <title>launcher · random pick</title>
   <style>
     * {
       margin: 0;
@@ -31,6 +31,7 @@
       --radius-card: 20px;
       --radius-search: 12px;
       --grid-gap: 14px;
+      --accent: #2c6e9e;
     }
 
     html, body {
@@ -67,7 +68,6 @@
       margin-top: 20px;
     }
 
-    /* cards & typography (unchanged from original) */
     .app {
       aspect-ratio: 1 / 1;
       background: var(--card);
@@ -103,64 +103,110 @@
       word-break: break-word;
       padding: 0 6px;
     }
-    /* skeleton, search, result-meta, footer – same as original */
+
     .search-wrapper { position: relative; width: 100%; }
-    #search { width: 100%; height: 44px; border: 0.5px solid var(--border-subtle); background: var(--search-bg); color: var(--text); border-radius: var(--radius-search); padding: 0 42px 0 18px; font-size: 17px; }
-    .clear-search { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 24px; background: rgba(120,120,128,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; pointer-events: none; }
+    #search {
+      width: 100%;
+      height: 44px;
+      border: 0.5px solid var(--border-subtle);
+      background: var(--search-bg);
+      color: var(--text);
+      border-radius: var(--radius-search);
+      padding: 0 42px 0 18px;
+      font-size: 17px;
+    }
+    .clear-search {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 24px;
+      background: rgba(120,120,128,0.6);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+    }
     .clear-search.visible { opacity: 0.8; pointer-events: auto; }
-    .result-meta { margin-top: 16px; padding-top: 12px; border-top: 0.5px solid rgba(255,255,255,0.06); font-size: 13px; color: var(--text-secondary); display: flex; justify-content: space-between; }
+
+    .result-meta {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 0.5px solid rgba(255,255,255,0.06);
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* Random button */
+    .random-btn {
+      background: rgba(44,110,158,0.2);
+      border: 0.5px solid rgba(44,110,158,0.6);
+      border-radius: 30px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6bb5e0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.1s ease;
+      backdrop-filter: blur(4px);
+    }
+    .random-btn:active {
+      transform: scale(0.95);
+      background: rgba(44,110,158,0.4);
+    }
+    @media (hover: hover) {
+      .random-btn:hover {
+        background: rgba(44,110,158,0.4);
+        transform: scale(0.98);
+      }
+    }
+
     .skeleton { background: #151518; position: relative; overflow: hidden; }
     .skeleton::before { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.03) 50%, transparent 70%); animation: shimmer 0.9s ease-in-out infinite; }
     @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
     .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 0; }
     .footer-meta { margin-top: 40px; display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-muted); }
     .retry-btn { background: none; border: none; color: var(--text-secondary); font-size: 12px; text-decoration: underline; cursor: pointer; }
     .pull-spinner { width: 14px; height: 14px; border: 1.5px solid rgba(110,110,115,0.5); border-top-color: var(--text-secondary); border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ===== DESKTOP & TABLET (wider, more columns) ===== */
-    /* No more conflicting landscape rule – desktop now works */
-
-    /* Small tablets / portrait (≥768px) -> 3 columns */
+    /* desktop media (multi-column) */
     @media (min-width: 768px) and (max-width: 1023px) {
-      .shell { max-width: 860px; padding-left: 24px; padding-right: 24px; }
+      .shell { max-width: 860px; }
       .grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
       .emoji { font-size: 52px; }
-      .label { font-size: 15px; }
     }
-
-    /* Desktop & large tablets landscape (≥1024px) -> 4 columns */
     @media (min-width: 1024px) {
       .shell { max-width: 1280px; padding-left: 32px; padding-right: 32px; }
       .grid { grid-template-columns: repeat(4, 1fr); gap: 22px; }
-      .app { padding: 24px 12px; }
-      .emoji { font-size: 58px; margin-bottom: 8px; }
+      .emoji { font-size: 58px; }
       .label { font-size: 16px; }
-      h1 { font-size: 32px; }
-      #search { height: 48px; font-size: 18px; }
     }
-
-    /* Ultra-wide (≥1600px) -> 5 columns */
     @media (min-width: 1600px) {
-      .shell { max-width: 1600px; padding-left: 48px; padding-right: 48px; }
+      .shell { max-width: 1600px; }
       .grid { grid-template-columns: repeat(5, 1fr); gap: 26px; }
       .emoji { font-size: 64px; }
-      .label { font-size: 17px; }
     }
-
-    /* Desktop hover (doesn't affect touch) */
     @media (hover: hover) {
-      .app:hover { background: var(--card-pressed); transform: scale(0.97); transition: transform 0.1s, background 0.1s; }
-      .app:hover::after { opacity: 0.5; }
+      .app:hover { background: var(--card-pressed); transform: scale(0.97); }
     }
-
-    /* Keep original phone landscape behaviour (no width cap, just slightly bigger emoji) */
-    /* This only affects phones with width < 768px in landscape */
     @media (max-width: 767px) and (orientation: landscape) {
       .shell { max-width: 700px; }
-      .grid { gap: 18px; }
       .emoji { font-size: 56px; }
-      .label { font-size: 16px; }
     }
   </style>
 </head>
@@ -174,7 +220,10 @@
     </div>
     <div class="result-meta">
       <span id="resultCount"></span>
-      <span id="updateCheck" class="update-check"></span>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <button id="randomBtn" class="random-btn">🎲 random</button>
+        <span id="updateCheck" class="update-check"></span>
+      </div>
     </div>
   </div>
   <div id="apps" class="grid"></div>
@@ -196,6 +245,7 @@
     const timestampSpan = document.getElementById("timestampText");
     const pullSpinner = document.getElementById("pullSpinner");
     const retryBtn = document.getElementById("manualRetryBtn");
+    const randomBtn = document.getElementById("randomBtn");
 
     let apps = [];
     let isLoading = true;
@@ -234,6 +284,13 @@
       return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
     }
 
+    // returns filtered apps based on currentFilter
+    function getFilteredApps() {
+      const filter = currentFilter.trim().toLowerCase();
+      if (!filter) return apps;
+      return apps.filter(a => a.name.toLowerCase().includes(filter));
+    }
+
     function renderApps() {
       if (isLoading) {
         appsContainer.innerHTML = '';
@@ -247,13 +304,12 @@
         return;
       }
 
-      const filter = currentFilter.trim().toLowerCase();
-      let filtered = filter ? apps.filter(a => a.name.toLowerCase().includes(filter)) : apps;
+      const filtered = getFilteredApps();
       const total = filtered.length;
 
       if (apps.length === 0) {
         resultCountSpan.innerText = '';
-      } else if (!filter) {
+      } else if (!currentFilter.trim()) {
         resultCountSpan.innerText = `${total} ${total === 1 ? 'tool' : 'tools'}`;
       } else {
         resultCountSpan.innerText = `${total} matching`;
@@ -262,9 +318,9 @@
       if (filtered.length === 0) {
         appsContainer.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">${filter ? '🔍' : '📭'}</div>
-            <div class="empty-title">${filter ? 'no tools found' : 'no GitHub Pages apps'}</div>
-            <div class="empty-hint">${filter ? 'try a different keyword' : 'repositories with "Pages" enabled will appear here'}</div>
+            <div class="empty-icon">${currentFilter ? '🔍' : '📭'}</div>
+            <div class="empty-title">${currentFilter ? 'no tools found' : 'no GitHub Pages apps'}</div>
+            <div class="empty-hint">${currentFilter ? 'try a different keyword' : 'repositories with "Pages" enabled will appear here'}</div>
           </div>
         `;
         return;
@@ -280,6 +336,36 @@
         appsContainer.appendChild(card);
       }
     }
+
+    // --- RANDOM PICKER ---
+    function pickRandomApp() {
+      if (isLoading) {
+        updateCheckSpan.innerText = 'loading...';
+        setTimeout(() => { if (updateCheckSpan.innerText === 'loading...') updateCheckSpan.innerText = ''; }, 1500);
+        return;
+      }
+      let candidates = getFilteredApps();
+      if (candidates.length === 0) {
+        // fallback to all apps if filtered empty
+        if (apps.length === 0) {
+          updateCheckSpan.innerText = 'no apps yet';
+          setTimeout(() => { if (updateCheckSpan.innerText === 'no apps yet') updateCheckSpan.innerText = ''; }, 2000);
+          return;
+        }
+        candidates = apps;
+      }
+      const randomIndex = Math.floor(Math.random() * candidates.length);
+      const selected = candidates[randomIndex];
+      // optional haptic
+      if (navigator.vibrate) navigator.vibrate(10);
+      // open the url
+      window.open(selected.url, '_blank');
+      // flash feedback
+      updateCheckSpan.innerText = `🎲 ${selected.name}`;
+      setTimeout(() => { if (updateCheckSpan.innerText === `🎲 ${selected.name}`) updateCheckSpan.innerText = ''; }, 2000);
+    }
+
+    randomBtn.addEventListener('click', pickRandomApp);
 
     function updateTimestamp() {
       if (!lastUpdated) { timestampSpan.innerText = 'never'; return; }
@@ -354,7 +440,7 @@
     retryBtn.addEventListener('click', () => fetchApps(true));
 
     document.body.addEventListener('touchstart', (e) => {
-      if (!e.target.closest('.app') && e.target !== searchInput && !clearBtn.contains(e.target)) {
+      if (!e.target.closest('.app') && e.target !== searchInput && !clearBtn.contains(e.target) && !randomBtn.contains(e.target)) {
         searchInput.blur();
       }
     });
