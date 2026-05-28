@@ -3,587 +3,713 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>alwin.pages</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<title>itsnotalwin / pages</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root {
-    --bg: #080808;
-    --bg2: #111111;
-    --bg3: #1a1a1a;
-    --border: #222222;
-    --border-hover: #3a3a3a;
-    --text: #f0f0f0;
-    --text-dim: #666666;
-    --text-mid: #999999;
-    --accent: #f0f0f0;
-    --font: 'DM Mono', monospace;
-  }
+:root {
+  --bg:    #080808;
+  --bg2:   #0f0f0f;
+  --bg3:   #161616;
+  --b:     #1e1e1e;
+  --b2:    #2a2a2a;
+  --text:  #f0f0f0;
+  --muted: #4a4a4a;
+  --dim:   #2a2a2a;
+  --serif: 'DM Serif Display', serif;
+  --mono:  'DM Mono', monospace;
+}
 
-  html, body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font);
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
+html { scroll-behavior: smooth; }
 
-  /* ── Layout ── */
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 60px 24px 80px;
-  }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  /* ── Header ── */
-  header {
-    margin-bottom: 52px;
-  }
+/* ── PAGE ENTER ── */
+body { animation: pageIn 0.6s ease both; }
+@keyframes pageIn { from { opacity: 0 } to { opacity: 1 } }
 
-  .site-title {
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 6px;
-  }
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+}
 
-  .site-heading {
-    font-size: clamp(28px, 5vw, 42px);
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    color: var(--text);
-  }
+/* ── TOP RULE ── */
+.top-rule { width: 100%; height: 1px; background: #fff; position: relative; }
+.top-rule::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 60px; height: 1px;
+  background: #fff;
+  animation: ruleSlide 1.2s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes ruleSlide { from { width: 0 } to { width: 100% } }
 
-  .site-heading span {
-    color: var(--text-dim);
-  }
+/* ── HERO ── */
+.hero {
+  padding: 64px 40px 56px;
+  border-bottom: 1px solid var(--b);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 40px;
+  animation: heroIn 1s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+}
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(24px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
 
-  /* ── Search ── */
-  .search-wrap {
-    margin-bottom: 40px;
-    position: relative;
-  }
+.hero-left {}
 
-  .search-label {
-    display: block;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 10px;
-  }
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-  .search-inner {
-    position: relative;
-  }
+.hero-eyebrow::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--muted);
+}
 
-  .search-prefix {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    color: var(--text-dim);
-    pointer-events: none;
-    font-family: var(--font);
-  }
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(52px, 8vw, 96px);
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -3px;
+  line-height: 0.92;
+  margin-bottom: 28px;
+}
 
-  #search {
-    width: 100%;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: var(--font);
-    font-size: 14px;
-    font-weight: 400;
-    padding: 14px 16px 14px 36px;
-    outline: none;
-    transition: border-color 0.15s, background 0.15s;
-    appearance: none;
-  }
+.hero-title em {
+  font-style: italic;
+  display: block;
+}
 
-  #search::placeholder {
-    color: var(--text-dim);
-  }
+.hero-sub {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  max-width: 360px;
+}
 
-  #search:focus {
-    border-color: var(--border-hover);
-    background: var(--bg3);
-  }
+.hero-right {
+  text-align: right;
+  padding-bottom: 8px;
+}
 
-  /* ── Sort toggle ── */
-  .controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 40px;
-  }
+.hero-count {
+  font-family: var(--serif);
+  font-size: clamp(48px, 6vw, 72px);
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -2px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.hero-count.loaded { opacity: 1; }
 
-  .sort-label {
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    flex-shrink: 0;
-  }
+.hero-count-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
 
-  .sort-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text-mid);
-    font-family: var(--font);
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    padding: 6px 14px;
-    cursor: pointer;
-    transition: all 0.12s;
-    text-transform: lowercase;
-  }
+/* ── MAIN WRAP ── */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 40px 100px; }
 
-  .sort-btn:hover {
-    border-color: var(--border-hover);
-    color: var(--text);
-  }
+/* ── SEARCH SECTION ── */
+.search-section {
+  padding: 48px 0 0;
+  animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.25s both;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
 
-  .sort-btn.active {
-    background: var(--text);
-    color: var(--bg);
-    border-color: var(--text);
-  }
+.search-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: stretch;
+  margin-bottom: 0;
+}
 
-  /* ── Section headers ── */
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
+.search-inner { position: relative; }
+.search-prefix {
+  position: absolute; left: 20px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted); font-size: 18px;
+  pointer-events: none; font-family: var(--mono);
+  line-height: 1;
+}
 
-  .section-title {
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
+input[type="text"] {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--b2);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 16px;
+  padding: 18px 20px 18px 44px;
+  outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+  transition: border-color 0.2s, background 0.2s;
+  letter-spacing: 0.02em;
+}
+input[type="text"]:focus {
+  border-color: #555;
+  background: #111;
+}
+input[type="text"]::placeholder { color: var(--dim); }
 
-  .section-count {
-    font-size: 11px;
-    color: #333;
-  }
+/* ── SORT TOGGLE ── */
+.sort-toggle { display: flex; border: 1px solid var(--b2); }
+.sort-btn {
+  background: transparent; border: none;
+  color: var(--muted); font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; padding: 0 20px;
+  cursor: pointer; transition: background 0.2s, color 0.2s;
+  border-right: 1px solid var(--b2); white-space: nowrap;
+}
+.sort-btn:last-child { border-right: none; }
+.sort-btn.active { background: var(--text); color: var(--bg); }
+.sort-btn:not(.active):hover { background: var(--bg3); color: var(--text); }
 
-  .section-divider {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+/* ── META ROW ── */
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--b);
+  margin-bottom: 48px;
+  animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.35s both;
+}
+.meta-label {
+  font-size: 10px; color: var(--muted);
+  letter-spacing: 0.15em; text-transform: uppercase;
+}
 
-  /* ── Recently visited ── */
-  .recent-section {
-    margin-bottom: 48px;
-  }
+/* ── SECTION HEADING ── */
+.section-heading {
+  display: flex; align-items: baseline; gap: 16px;
+  margin-bottom: 20px;
+}
+.section-num { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: 0.2em; }
+.section-title {
+  font-family: var(--serif);
+  font-size: 28px; font-weight: 400;
+  color: var(--text); letter-spacing: -0.5px;
+}
+.section-rule { flex: 1; height: 1px; background: var(--b); }
 
-  .recent-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
+/* ── RECENTLY VISITED ── */
+.recent-section {
+  margin-bottom: 64px;
+  animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.4s both;
+}
 
-  .recent-card {
-    background: var(--bg2);
-    padding: 18px 20px;
-    text-decoration: none;
-    display: block;
-    position: relative;
-    transition: background 0.12s;
-    overflow: hidden;
-  }
+.recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--b); border: 1px solid var(--b); }
 
-  .recent-card:hover {
-    background: var(--bg3);
-  }
+.recent-card {
+  background: var(--bg);
+  padding: 20px 22px;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+.recent-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 1px;
+  background: var(--text);
+  transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.recent-card:hover { background: var(--bg2); }
+.recent-card:hover::after { width: 100%; }
 
-  .recent-card::before {
-    content: 'visited';
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #2a2a2a;
-  }
+.recent-num {
+  font-family: var(--serif);
+  font-size: 32px; font-weight: 400;
+  color: var(--dim); line-height: 1;
+  margin-bottom: 10px;
+  transition: color 0.2s;
+}
+.recent-card:hover .recent-num { color: var(--muted); }
+.recent-name {
+  font-size: 12px; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+}
+.recent-sub {
+  font-size: 9px; color: var(--muted);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  margin-top: 4px;
+}
 
-  .recent-name {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.recent-empty {
+  grid-column: 1/-1;
+  background: var(--bg);
+  padding: 32px 24px;
+  font-size: 11px; color: var(--muted);
+  font-style: italic;
+}
 
-  .recent-desc {
-    font-size: 11px;
-    color: var(--text-dim);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+/* ── MAIN GRID ── */
+.all-section { animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
 
-  /* ── Main grid ── */
-  .grid-section {
-    margin-bottom: 48px;
-  }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--b);
+  border: 1px solid var(--b);
+}
 
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
+/* Card entrance stagger via JS class */
+.card {
+  background: var(--bg);
+  padding: 28px 24px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 140px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    background 0.2s,
+    opacity 0.5s cubic-bezier(0.16,1,0.3,1),
+    transform 0.5s cubic-bezier(0.16,1,0.3,1);
+}
 
-  .card {
-    background: var(--bg2);
-    padding: 24px 22px;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    position: relative;
-    transition: background 0.12s;
-    cursor: pointer;
-    min-height: 110px;
-  }
+.card.visible { opacity: 1; transform: translateY(0); }
 
-  .card:hover {
-    background: var(--bg3);
-  }
+/* Sliding underline on hover */
+.card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 1px; width: 0;
+  background: var(--text);
+  transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.card:hover { background: var(--bg2); }
+.card:hover::after { width: 100%; }
 
-  .card:hover .card-arrow {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
+.card-index {
+  font-family: var(--serif);
+  font-size: 11px; color: var(--dim);
+  font-style: italic;
+  letter-spacing: 0;
+}
 
-  .card-index {
-    font-size: 10px;
-    color: #2a2a2a;
-    letter-spacing: 0.05em;
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    font-weight: 300;
-  }
+.card-name {
+  font-family: var(--serif);
+  font-size: 22px; font-weight: 400;
+  color: var(--text);
+  line-height: 1.15;
+  letter-spacing: -0.4px;
+  word-break: break-word;
+  flex: 1;
+}
 
-  .card-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    letter-spacing: -0.01em;
-    line-height: 1.3;
-    padding-right: 24px;
-  }
+.card-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
 
-  .card-desc {
-    font-size: 12px;
-    font-weight: 300;
-    color: var(--text-mid);
-    line-height: 1.5;
-    flex: 1;
-  }
+.card-desc {
+  font-size: 10px; color: var(--muted);
+  line-height: 1.7; letter-spacing: 0.02em;
+  font-family: var(--mono);
+  max-width: 75%;
+}
 
-  .card-arrow {
-    position: absolute;
-    bottom: 14px;
-    right: 16px;
-    font-size: 12px;
-    color: var(--text-dim);
-    opacity: 0;
-    transform: translate(-4px, 4px);
-    transition: all 0.15s;
-  }
+.card-arrow {
+  font-size: 20px; color: var(--dim);
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s, color 0.2s;
+  transform: translate(-4px, 4px);
+  flex-shrink: 0;
+}
+.card:hover .card-arrow {
+  opacity: 1;
+  transform: translate(0, 0);
+  color: var(--text);
+}
 
-  /* ── Empty / loading states ── */
-  .state-msg {
-    grid-column: 1 / -1;
-    padding: 48px 24px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--text-dim);
-    font-style: italic;
-  }
+/* ── STATE ── */
+.state {
+  padding: 80px 20px; text-align: center;
+  color: var(--muted); font-size: 12px;
+  grid-column: 1/-1; background: var(--bg);
+}
+.state-title {
+  font-family: var(--serif);
+  font-size: 28px; color: var(--b2);
+  margin-bottom: 10px; font-weight: 400;
+}
 
-  .loading-dots::after {
-    content: '';
-    animation: dots 1.2s steps(4, end) infinite;
-  }
+.spinner {
+  display: inline-block; width: 14px; height: 14px;
+  border: 1px solid var(--b2); border-top-color: var(--text);
+  border-radius: 50%; animation: spin 0.7s linear infinite;
+  margin-right: 8px; vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  @keyframes dots {
-    0%   { content: ''; }
-    25%  { content: '.'; }
-    50%  { content: '..'; }
-    75%  { content: '...'; }
-  }
+/* ── NO RESULTS ── */
+.no-results { display: none; margin-top: 1px; }
+.no-results.show { display: block; }
+.no-results-inner {
+  padding: 80px 0; text-align: center;
+  border: 1px solid var(--b); border-top: none;
+  background: var(--bg);
+}
+.no-results-title {
+  font-family: var(--serif);
+  font-size: 36px; color: var(--b2);
+  margin-bottom: 10px; font-weight: 400; font-style: italic;
+}
+.no-results-sub { font-size: 11px; color: var(--muted); }
+.no-results-sub code { font-family: var(--mono); }
 
-  /* ── Footer ── */
-  footer {
-    padding-top: 32px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    color: #333;
-    letter-spacing: 0.06em;
-  }
+/* ── FOOTER ── */
+.footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 28px 0 0; border-top: 1px solid var(--b); margin-top: 80px;
+}
+.footer-left { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+.footer-right { font-size: 10px; color: var(--dim); letter-spacing: 0.1em; }
 
-  .footer-count {
-    color: var(--text-dim);
-  }
-
-  /* ── No results ── */
-  .no-results {
-    padding: 60px 0;
-    text-align: center;
-    font-size: 13px;
-    color: var(--text-dim);
-    font-style: italic;
-  }
-
-  /* ── Scrollbar ── */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); }
-
-  @media (max-width: 600px) {
-    .recent-grid { grid-template-columns: 1fr 1fr; }
-    .container { padding: 36px 16px 60px; }
-    .site-heading { font-size: 28px; }
-  }
-  @media (max-width: 400px) {
-    .recent-grid { grid-template-columns: 1fr; }
-  }
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .hero { grid-template-columns: 1fr; gap: 20px; padding: 40px 24px; }
+  .hero-right { text-align: left; }
+  .wrap { padding: 0 24px 60px; }
+  .search-row { grid-template-columns: 1fr; }
+  .sort-toggle { width: 100%; }
+  .sort-btn { flex: 1; padding: 14px; }
+  .recent-grid { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
-<div class="container">
 
-  <header>
-    <p class="site-title">github pages launcher</p>
-    <h1 class="site-heading">itsnotalwin<span>.github.io</span></h1>
-  </header>
+<div class="top-rule"></div>
 
-  <div class="search-wrap">
-    <label class="search-label" for="search">filter</label>
-    <div class="search-inner">
-      <span class="search-prefix">/</span>
-      <input id="search" type="text" placeholder="search projects..." autocomplete="off" spellcheck="false">
+<!-- HERO (full-width, outside wrap) -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Live Sites · itsnotalwin</div>
+    <div class="hero-title">
+      itsnotalwin
+      <em>/ pages</em>
+    </div>
+    <div class="hero-sub">
+      Everything I've shipped, in one place.<br>
+      Find it, open it, get on with it.
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-count" id="hero-count">—</div>
+    <div class="hero-count-label">Things I've Built</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- SEARCH + SORT -->
+  <div class="search-section">
+    <div class="search-row">
+      <div class="search-inner">
+        <span class="search-prefix">/</span>
+        <input type="text" id="search" placeholder="what are you looking for..." autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="sort-toggle">
+        <button class="sort-btn active" id="sort-name" onclick="setSort('name')">A → Z</button>
+        <button class="sort-btn" id="sort-recent" onclick="setSort('recent')">Recent</button>
+      </div>
     </div>
   </div>
 
-  <div class="controls">
-    <span class="sort-label">sort by</span>
-    <button class="sort-btn active" data-sort="name">name</button>
-    <button class="sort-btn" data-sort="recent">recent</button>
+  <!-- META ROW -->
+  <div class="meta-row">
+    <div class="meta-label" id="result-label">Loading...</div>
+    <div class="meta-label" id="meta-right">Press / to search</div>
   </div>
 
-  <!-- Recently visited -->
-  <section class="recent-section" id="recentSection" style="display:none">
-    <div class="section-header">
-      <span class="section-title">recently visited</span>
-      <div class="section-divider"></div>
+  <!-- RECENTLY VISITED -->
+  <div class="recent-section" id="recent-section">
+    <div class="section-heading">
+      <span class="section-num">01 —</span>
+      <span class="section-title">Recently Visited</span>
+      <div class="section-rule"></div>
     </div>
-    <div class="recent-grid" id="recentGrid"></div>
-  </section>
+    <div class="recent-grid" id="recent-grid"></div>
+  </div>
 
-  <!-- All sites -->
-  <section class="grid-section">
-    <div class="section-header">
-      <span class="section-title">all projects</span>
-      <span class="section-count" id="countLabel"></span>
-      <div class="section-divider"></div>
+  <!-- ALL SITES -->
+  <div class="all-section">
+    <div class="section-heading">
+      <span class="section-num">02 —</span>
+      <span class="section-title">The Full Archive</span>
+      <div class="section-rule"></div>
     </div>
-    <div class="card-grid" id="cardGrid">
-      <div class="state-msg loading-dots">fetching</div>
+    <div class="grid" id="grid">
+      <div class="state"><span class="spinner"></span> Pulling your sites...</div>
     </div>
-  </section>
+    <div class="no-results" id="no-results">
+      <div class="no-results-inner">
+        <div class="no-results-title">Nothing found.</div>
+        <div class="no-results-sub">No site matches <code id="query-echo"></code></div>
+      </div>
+    </div>
+  </div>
 
-  <footer>
-    <span>itsnotalwin — github pages</span>
-    <span class="footer-count" id="footerCount"></span>
-  </footer>
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">MIT · itsnotalwin · 2025</div>
+    <div class="footer-right">github.com/itsnotalwin</div>
+  </div>
 
 </div>
 
 <script>
 const USERNAME = 'itsnotalwin';
-const RECENT_KEY = 'alwin_launcher_recent';
-const SORT_KEY = 'alwin_launcher_sort';
+const LS_KEY = 'pages_v2';
+let allRepos = [];
+let sortMode = 'name';
+let query = '';
 
-// ── Description generator ──────────────────────────────────────────────────
-function describeRepo(name) {
-  const n = name.toLowerCase().replace(/[-_.]/g, ' ');
-  const rules = [
-    [/portfolio|personal|site|www/, 'personal website & portfolio'],
-    [/blog|journal|posts|writing/, 'writing & thoughts'],
-    [/game|puzzle|quiz|play|arcade/, 'browser-based game'],
-    [/todo|task|list|notes?|note-?taking/, 'task & note management'],
-    [/chat|message|talk|discord/, 'messaging or chat interface'],
-    [/music|audio|sound|player|spotify/, 'audio & music tool'],
-    [/weather|forecast|climate/, 'weather dashboard'],
-    [/map|geo|location|place/, 'map & location tool'],
-    [/calc|math|convert|unit/, 'calculator or converter'],
-    [/timer|clock|stopwatch|pomodoro/, 'time tracking utility'],
-    [/draw|paint|canvas|art|sketch/, 'drawing or creative tool'],
-    [/dashboard|stats|analytic|metrics/, 'data & analytics dashboard'],
-    [/api|fetch|scrape|data/, 'data fetching utility'],
-    [/tool|util|helper|gen|generator/, 'developer utility'],
-    [/doc|wiki|guide|docs/, 'documentation & guides'],
-    [/demo|example|sample|template/, 'demo or starter template'],
-    [/css|style|theme|design/, 'CSS experiments & styling'],
-    [/js|javascript|script/, 'JavaScript project'],
-    [/react|vue|svelte|next/, 'frontend web app'],
-    [/python|py/, 'Python project'],
-    [/api/, 'API integration'],
-    [/extension|chrome|firefox/, 'browser extension'],
-  ];
-  for (const [re, desc] of rules) {
-    if (re.test(n)) return desc;
-  }
-  const words = name.replace(/[-_]/g, ' ').split(' ').filter(Boolean);
-  if (words.length === 1) return `${words[0]} — web project`;
-  return words.slice(0, 3).join(' ') + ' — web project';
+// ── DESCRIPTION ──
+function desc(name) {
+  const w = name.replace(/[-_.]/g, ' ').replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().split(' ').filter(Boolean);
+  const m = {
+    portfolio:'Personal portfolio and showcase.',blog:'Writing and long-form thoughts.',
+    docs:'Documentation and reference.',api:'API explorer and reference.',
+    demo:'Live interactive demonstration.',tool:'Browser-based utility.',
+    tools:'Collection of utilities.',game:'Playable browser game.',
+    games:'Collection of browser games.',dashboard:'Data dashboard.',
+    landing:'Product landing page.',notes:'Personal notes and reference.',
+    app:'Web application.',ui:'UI component showcase.',
+    components:'Reusable component library.',starter:'Project starter template.',
+    template:'Reusable project template.',cv:'Curriculum vitae.',
+    resume:'Professional résumé.',calculator:'Browser calculator.',
+    timer:'Timer utility.',clock:'Clock display.',music:'Audio project.',
+    chat:'Chat interface.',auth:'Authentication demo.',map:'Map visualisation.',
+    quiz:'Interactive quiz.',todo:'Task manager.',weather:'Weather app.',
+    gallery:'Image gallery.',shop:'E-commerce demo.',search:'Search interface.',
+  };
+  for (const word of w) if (m[word]) return m[word];
+  return w.map(x => x[0].toUpperCase()+x.slice(1)).join(' ') + '.';
 }
 
-// ── Recent visited ─────────────────────────────────────────────────────────
+// ── RECENTLY VISITED ──
 function getRecent() {
-  try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); }
-  catch { return []; }
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch { return []; }
 }
 function addRecent(repo) {
   let list = getRecent().filter(r => r.name !== repo.name);
-  list.unshift(repo);
-  list = list.slice(0, 3);
-  try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch {}
+  list.unshift({ name: repo.name, url: repo.url });
+  localStorage.setItem(LS_KEY, JSON.stringify(list.slice(0, 3)));
+  renderRecent();
 }
 function renderRecent() {
   const list = getRecent();
-  const section = document.getElementById('recentSection');
-  const grid = document.getElementById('recentGrid');
-  if (!list.length) { section.style.display = 'none'; return; }
-  section.style.display = '';
-  grid.innerHTML = list.map(r => `
-    <a class="recent-card" href="${r.url}" target="_blank" data-name="${r.name}" data-url="${r.url}" data-desc="${r.desc}">
-      <div class="recent-name">${r.name}</div>
-      <div class="recent-desc">${r.desc}</div>
-    </a>
-  `).join('');
-  grid.querySelectorAll('.recent-card').forEach(el => {
-    el.addEventListener('click', () => addRecent({ name: el.dataset.name, url: el.dataset.url, desc: el.dataset.desc }));
-  });
-}
-
-// ── Sort state ─────────────────────────────────────────────────────────────
-let sortMode = localStorage.getItem(SORT_KEY) || 'name';
-let allRepos = [];
-
-document.querySelectorAll('.sort-btn').forEach(btn => {
-  if (btn.dataset.sort === sortMode) btn.classList.add('active');
-  else btn.classList.remove('active');
-
-  btn.addEventListener('click', () => {
-    sortMode = btn.dataset.sort;
-    try { localStorage.setItem(SORT_KEY, sortMode); } catch {}
-    document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === sortMode));
-    renderCards(allRepos);
-  });
-});
-
-// ── Sort repos ─────────────────────────────────────────────────────────────
-function sortRepos(repos) {
-  if (sortMode === 'name') {
-    return [...repos].sort((a, b) => a.name.localeCompare(b.name));
-  } else {
-    return [...repos].sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+  const grid = document.getElementById('recent-grid');
+  grid.innerHTML = '';
+  if (!list.length) {
+    grid.innerHTML = '<div class="recent-empty">Nothing yet. Open a site below and it\'ll appear here.</div>';
+    return;
   }
+  list.forEach((r, i) => {
+    const a = document.createElement('a');
+    a.href = r.url; a.target = '_blank'; a.className = 'recent-card';
+    a.addEventListener('click', () => addRecent(r));
+    a.innerHTML = `
+      <div class="recent-num">0${i+1}</div>
+      <div class="recent-name">${r.name}</div>
+      <div class="recent-sub">Last opened</div>
+    `;
+    grid.appendChild(a);
+  });
 }
 
-// ── Search ─────────────────────────────────────────────────────────────────
-const searchEl = document.getElementById('search');
-searchEl.addEventListener('input', () => renderCards(allRepos));
+// ── SORT ──
+function setSort(mode) {
+  sortMode = mode;
+  document.getElementById('sort-name').classList.toggle('active', mode === 'name');
+  document.getElementById('sort-recent').classList.toggle('active', mode === 'recent');
+  renderGrid();
+}
+function sorted(repos) {
+  if (sortMode === 'name') return [...repos].sort((a,b) => a.name.localeCompare(b.name));
+  const rn = getRecent().map(r => r.name);
+  return [...repos].sort((a,b) => {
+    const ai = rn.indexOf(a.name), bi = rn.indexOf(b.name);
+    if (ai===-1&&bi===-1) return a.name.localeCompare(b.name);
+    if (ai===-1) return 1; if (bi===-1) return -1;
+    return ai-bi;
+  });
+}
 
-// ── Render cards ───────────────────────────────────────────────────────────
-function renderCards(repos) {
-  const query = searchEl.value.toLowerCase().trim();
-  const sorted = sortRepos(repos);
-  const filtered = query ? sorted.filter(r => r.name.toLowerCase().includes(query)) : sorted;
+// ── RENDER GRID ──
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const noR  = document.getElementById('no-results');
+  const label = document.getElementById('result-label');
+  const q = query.toLowerCase();
+  const filtered = allRepos.filter(r => r.name.toLowerCase().includes(q));
+  const s = sorted(filtered);
 
-  const grid = document.getElementById('cardGrid');
-  const countLabel = document.getElementById('countLabel');
-  const footerCount = document.getElementById('footerCount');
+  grid.innerHTML = '';
+  noR.classList.remove('show');
 
-  countLabel.textContent = `${filtered.length}`;
-  footerCount.textContent = `${filtered.length} of ${repos.length} sites`;
-
-  if (!filtered.length) {
-    grid.innerHTML = `<div class="state-msg">no projects match "${query}"</div>`;
+  if (!s.length && allRepos.length) {
+    noR.classList.add('show');
+    document.getElementById('query-echo').textContent = `"${query}"`;
+    label.textContent = '0 results';
     return;
   }
 
-  grid.innerHTML = filtered.map((repo, i) => {
-    const url = `https://${USERNAME}.github.io/${repo.name}/`;
-    const desc = describeRepo(repo.name);
-    const idx = String(i + 1).padStart(2, '0');
-    return `
-      <a class="card" href="${url}" target="_blank"
-         data-name="${repo.name}" data-url="${url}" data-desc="${desc.replace(/"/g, '&quot;')}">
-        <span class="card-index">${idx}</span>
-        <div class="card-name">${repo.name}</div>
-        <div class="card-desc">${desc}</div>
-        <span class="card-arrow">↗</span>
-      </a>
-    `;
-  }).join('');
+  label.textContent = `${s.length} site${s.length!==1?'s':''}`;
 
-  grid.querySelectorAll('.card').forEach(el => {
-    el.addEventListener('click', () => {
-      addRecent({ name: el.dataset.name, url: el.dataset.url, desc: el.dataset.desc });
-      setTimeout(renderRecent, 200);
+  s.forEach((repo, i) => {
+    const a = document.createElement('a');
+    a.href = repo.url; a.target = '_blank'; a.className = 'card';
+    a.addEventListener('click', () => addRecent(repo));
+    // index, padded
+    const idx = String(i+1).padStart(2, '0');
+    a.innerHTML = `
+      <div class="card-index">${idx}</div>
+      <div class="card-name">${repo.name}</div>
+      <div class="card-bottom">
+        <div class="card-desc">${desc(repo.name)}</div>
+        <div class="card-arrow">↗</div>
+      </div>
+    `;
+    grid.appendChild(a);
+    // staggered entrance
+    requestAnimationFrame(() => {
+      setTimeout(() => a.classList.add('visible'), i * 40);
     });
   });
 }
 
-// ── Fetch repos ────────────────────────────────────────────────────────────
+// ── FETCH ──
 async function fetchRepos() {
+  const grid = document.getElementById('grid');
+  const heroCount = document.getElementById('hero-count');
   try {
     let page = 1, repos = [];
     while (true) {
-      const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&page=${page}`);
-      if (!res.ok) throw new Error(`GitHub API: ${res.status}`);
-      const batch = await res.json();
-      if (!batch.length) break;
-      repos = repos.concat(batch.filter(r => r.has_pages));
-      if (batch.length < 100) break;
+      const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&page=${page}&type=public`);
+      if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+      const data = await res.json();
+      if (!data.length) break;
+      repos = repos.concat(data.filter(r => r.has_pages).map(r => ({
+        name: r.name,
+        url: `https://${USERNAME}.github.io/${r.name}/`,
+      })));
+      if (data.length < 100) break;
       page++;
     }
     allRepos = repos;
-    renderCards(allRepos);
-    renderRecent();
-  } catch (err) {
-    document.getElementById('cardGrid').innerHTML =
-      `<div class="state-msg">failed to load — ${err.message}</div>`;
+
+    // Animate count
+    if (repos.length) {
+      let n = 0;
+      const target = repos.length;
+      const step = () => {
+        n = Math.min(n + Math.ceil(target / 20), target);
+        heroCount.textContent = n;
+        if (n < target) requestAnimationFrame(step);
+      };
+      heroCount.classList.add('loaded');
+      requestAnimationFrame(step);
+    } else {
+      heroCount.textContent = '0';
+      heroCount.classList.add('loaded');
+    }
+
+    document.getElementById('result-label').textContent = `${repos.length} site${repos.length!==1?'s':''}`;
+
+    if (!repos.length) {
+      grid.innerHTML = `<div class="state"><div class="state-title">Nothing here yet.</div><div>Enable GitHub Pages on a repo and it'll show up.</div></div>`;
+      return;
+    }
+    renderGrid();
+  } catch(err) {
+    grid.innerHTML = `<div class="state"><div class="state-title">Couldn't connect.</div><div>GitHub may be rate-limiting this request. Try again in a moment.</div></div>`;
+    heroCount.textContent = '!';
+    heroCount.classList.add('loaded');
   }
 }
 
+// ── SEARCH ──
+document.getElementById('search').addEventListener('input', e => {
+  query = e.target.value;
+  renderGrid();
+});
+
+// ── KEYBOARD ──
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+    e.preventDefault();
+    document.getElementById('search').focus();
+  }
+  if (e.key === 'Escape') {
+    document.getElementById('search').blur();
+    document.getElementById('search').value = '';
+    query = '';
+    renderGrid();
+  }
+});
+
+// ── INIT ──
+renderRecent();
 fetchRepos();
 </script>
 </body>
