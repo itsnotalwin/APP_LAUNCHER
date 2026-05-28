@@ -1,482 +1,590 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#000000">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>launcher · smooth black‑grey gradient</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>alwin.pages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* SIMPLE BLACK-GREY GRADIENT — no animation, no heavy shifts */
-    body {
-      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a1f 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      overscroll-behavior: none;
-      font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
-    }
+  :root {
+    --bg: #080808;
+    --bg2: #111111;
+    --bg3: #1a1a1a;
+    --border: #222222;
+    --border-hover: #3a3a3a;
+    --text: #f0f0f0;
+    --text-dim: #666666;
+    --text-mid: #999999;
+    --accent: #f0f0f0;
+    --font: 'DM Mono', monospace;
+  }
 
-    :root {
-      --card: rgba(17, 17, 18, 0.85);
-      --card-pressed: rgba(28, 28, 30, 0.95);
-      --text: #f5f5f7;
-      --text-secondary: #8e8e93;
-      --text-muted: #6c6c70;
-      --search-bg: rgba(15, 15, 16, 0.7);
-      --search-focus: rgba(26, 26, 28, 0.95);
-      --border-subtle: rgba(255,255,255,0.08);
-      --radius-card: 20px;
-      --radius-search: 12px;
-      --grid-gap: 14px;
-    }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
 
-    /* LIGHTWEIGHT BLUR — only on shell, no heavy compositing */
-    .shell {
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
-      padding-top: calc(env(safe-area-inset-top) + 14px);
-      padding-left: 20px;
-      padding-right: 20px;
-      padding-bottom: calc(env(safe-area-inset-bottom) + 28px);
-      backdrop-filter: blur(12px);
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 0;
-    }
+  /* ── Layout ── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--grid-gap);
-      width: 100%;
-      margin-top: 20px;
-    }
+  /* ── Header ── */
+  header {
+    margin-bottom: 52px;
+  }
 
-    .app {
-      aspect-ratio: 1 / 1;
-      background: var(--card);
-      border-radius: var(--radius-card);
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 16px 8px;
-      transition: transform 0.08s ease, background 0.08s ease;
-      cursor: pointer;
-      box-shadow: 0 0.5px 0.5px rgba(0,0,0,0.5), 0 1px 1.5px rgba(0,0,0,0.3);
-    }
-    .app:active {
-      transform: scale(0.95);
-      background: var(--card-pressed);
-    }
-    /* desktop hover (no glow, just scale) */
-    @media (hover: hover) {
-      .app:hover {
-        transform: scale(0.97);
-        background: rgba(28, 28, 30, 0.95);
-        transition: all 0.1s ease;
-      }
-    }
-    .emoji {
-      font-size: 48px;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .label {
-      width: 100%;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 510;
-      line-height: 1.3;
-      color: #efeff4;
-      word-break: break-word;
-      padding: 0 6px;
-    }
+  .site-title {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
 
-    .search-wrapper { position: relative; width: 100%; }
-    #search {
-      width: 100%;
-      height: 44px;
-      border: 0.5px solid var(--border-subtle);
-      background: var(--search-bg);
-      color: var(--text);
-      border-radius: var(--radius-search);
-      padding: 0 42px 0 18px;
-      font-size: 17px;
-      transition: background 0.2s;
-    }
-    #search:focus {
-      background: var(--search-focus);
-      border-color: rgba(255,255,255,0.2);
-      outline: none;
-    }
-    .clear-search {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      border-radius: 24px;
-      background: rgba(120,120,128,0.6);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .clear-search.visible { opacity: 0.8; pointer-events: auto; }
+  .site-heading {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text);
+  }
 
-    .result-meta {
-      margin-top: 16px;
-      padding-top: 12px;
-      border-top: 0.5px solid rgba(255,255,255,0.06);
-      font-size: 13px;
-      color: var(--text-secondary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+  .site-heading span {
+    color: var(--text-dim);
+  }
 
-    .random-btn {
-      background: rgba(120,120,128,0.2);
-      border: 0.5px solid rgba(255,255,255,0.2);
-      border-radius: 30px;
-      padding: 6px 16px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #ddd;
-      cursor: pointer;
-      transition: 0.1s ease;
-    }
-    .random-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+  /* ── Search ── */
+  .search-wrap {
+    margin-bottom: 40px;
+    position: relative;
+  }
 
-    .skeleton { background: #151518; position: relative; overflow: hidden; }
-    .skeleton::before { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.03) 50%, transparent 70%); animation: shimmer 0.9s infinite; }
-    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+  .search-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
 
-    .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 0; }
-    .footer-meta { margin-top: 40px; display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-muted); }
-    .retry-btn { background: none; border: none; color: var(--text-secondary); font-size: 12px; text-decoration: underline; cursor: pointer; }
-    .pull-spinner { width: 14px; height: 14px; border: 1.5px solid rgba(110,110,115,0.5); border-top-color: var(--text-secondary); border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+  .search-inner {
+    position: relative;
+  }
 
-    /* desktop multi-column */
-    @media (min-width: 768px) and (max-width: 1023px) { .shell { max-width: 860px; } .grid { grid-template-columns: repeat(3, 1fr); gap: 18px; } .emoji { font-size: 52px; } }
-    @media (min-width: 1024px) { .shell { max-width: 1280px; padding-left: 32px; padding-right: 32px; } .grid { grid-template-columns: repeat(4, 1fr); gap: 22px; } .emoji { font-size: 58px; } .label { font-size: 16px; } }
-    @media (min-width: 1600px) { .shell { max-width: 1600px; } .grid { grid-template-columns: repeat(5, 1fr); gap: 26px; } .emoji { font-size: 64px; } }
-    @media (max-width: 767px) and (orientation: landscape) { .shell { max-width: 700px; } .emoji { font-size: 56px; } }
-  </style>
+  .search-prefix {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--text-dim);
+    pointer-events: none;
+    font-family: var(--font);
+  }
+
+  #search {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 14px 16px 14px 36px;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    appearance: none;
+  }
+
+  #search::placeholder {
+    color: var(--text-dim);
+  }
+
+  #search:focus {
+    border-color: var(--border-hover);
+    background: var(--bg3);
+  }
+
+  /* ── Sort toggle ── */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+
+  .sort-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  .sort-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-mid);
+    font-family: var(--font);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.12s;
+    text-transform: lowercase;
+  }
+
+  .sort-btn:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  .sort-btn.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  /* ── Section headers ── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .section-count {
+    font-size: 11px;
+    color: #333;
+  }
+
+  .section-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Recently visited ── */
+  .recent-section {
+    margin-bottom: 48px;
+  }
+
+  .recent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .recent-card {
+    background: var(--bg2);
+    padding: 18px 20px;
+    text-decoration: none;
+    display: block;
+    position: relative;
+    transition: background 0.12s;
+    overflow: hidden;
+  }
+
+  .recent-card:hover {
+    background: var(--bg3);
+  }
+
+  .recent-card::before {
+    content: 'visited';
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #2a2a2a;
+  }
+
+  .recent-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .recent-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── Main grid ── */
+  .grid-section {
+    margin-bottom: 48px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .card {
+    background: var(--bg2);
+    padding: 24px 22px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    transition: background 0.12s;
+    cursor: pointer;
+    min-height: 110px;
+  }
+
+  .card:hover {
+    background: var(--bg3);
+  }
+
+  .card:hover .card-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  .card-index {
+    font-size: 10px;
+    color: #2a2a2a;
+    letter-spacing: 0.05em;
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-weight: 300;
+  }
+
+  .card-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    padding-right: 24px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-mid);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .card-arrow {
+    position: absolute;
+    bottom: 14px;
+    right: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition: all 0.15s;
+  }
+
+  /* ── Empty / loading states ── */
+  .state-msg {
+    grid-column: 1 / -1;
+    padding: 48px 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .loading-dots::after {
+    content: '';
+    animation: dots 1.2s steps(4, end) infinite;
+  }
+
+  @keyframes dots {
+    0%   { content: ''; }
+    25%  { content: '.'; }
+    50%  { content: '..'; }
+    75%  { content: '...'; }
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #333;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-count {
+    color: var(--text-dim);
+  }
+
+  /* ── No results ── */
+  .no-results {
+    padding: 60px 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+
+  @media (max-width: 600px) {
+    .recent-grid { grid-template-columns: 1fr 1fr; }
+    .container { padding: 36px 16px 60px; }
+    .site-heading { font-size: 28px; }
+  }
+  @media (max-width: 400px) {
+    .recent-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-<div class="shell">
-  <div class="topbar">
-    <h1>launcher</h1>
-    <div class="search-wrapper">
-      <input id="search" type="text" placeholder="search tools" autocomplete="off">
-      <div class="clear-search" id="clearSearchBtn"><span>✕</span></div>
-    </div>
-    <div class="result-meta">
-      <span id="resultCount"></span>
-      <div style="display: flex; gap: 12px; align-items: center;">
-        <button id="randomBtn" class="random-btn">🎲 random site</button>
-        <span id="updateCheck" class="update-check"></span>
-      </div>
+<div class="container">
+
+  <header>
+    <p class="site-title">github pages launcher</p>
+    <h1 class="site-heading">itsnotalwin<span>.github.io</span></h1>
+  </header>
+
+  <div class="search-wrap">
+    <label class="search-label" for="search">filter</label>
+    <div class="search-inner">
+      <span class="search-prefix">/</span>
+      <input id="search" type="text" placeholder="search projects..." autocomplete="off" spellcheck="false">
     </div>
   </div>
-  <div id="apps" class="grid"></div>
-  <div class="footer-meta">
-    <span id="timestampText">—</span>
-    <div id="pullSpinner" class="pull-spinner"></div>
-    <button id="manualRetryBtn" class="retry-btn">retry</button>
+
+  <div class="controls">
+    <span class="sort-label">sort by</span>
+    <button class="sort-btn active" data-sort="name">name</button>
+    <button class="sort-btn" data-sort="recent">recent</button>
   </div>
+
+  <!-- Recently visited -->
+  <section class="recent-section" id="recentSection" style="display:none">
+    <div class="section-header">
+      <span class="section-title">recently visited</span>
+      <div class="section-divider"></div>
+    </div>
+    <div class="recent-grid" id="recentGrid"></div>
+  </section>
+
+  <!-- All sites -->
+  <section class="grid-section">
+    <div class="section-header">
+      <span class="section-title">all projects</span>
+      <span class="section-count" id="countLabel"></span>
+      <div class="section-divider"></div>
+    </div>
+    <div class="card-grid" id="cardGrid">
+      <div class="state-msg loading-dots">fetching</div>
+    </div>
+  </section>
+
+  <footer>
+    <span>itsnotalwin — github pages</span>
+    <span class="footer-count" id="footerCount"></span>
+  </footer>
+
 </div>
 
 <script>
-  (function() {
-    const USERNAME = "itsnotalwin";
-    const appsContainer = document.getElementById("apps");
-    const searchInput = document.getElementById("search");
-    const clearBtn = document.getElementById("clearSearchBtn");
-    const resultCountSpan = document.getElementById("resultCount");
-    const updateCheckSpan = document.getElementById("updateCheck");
-    const timestampSpan = document.getElementById("timestampText");
-    const pullSpinner = document.getElementById("pullSpinner");
-    const retryBtn = document.getElementById("manualRetryBtn");
-    const randomBtn = document.getElementById("randomBtn");
+const USERNAME = 'itsnotalwin';
+const RECENT_KEY = 'alwin_launcher_recent';
+const SORT_KEY = 'alwin_launcher_sort';
 
-    let apps = [];
-    let isLoading = true;
-    let currentFilter = "";
-    let lastUpdated = null;
-    let lastFetchTime = 0;
-    let refreshingFromForeground = false;
+// ── Description generator ──────────────────────────────────────────────────
+function describeRepo(name) {
+  const n = name.toLowerCase().replace(/[-_.]/g, ' ');
+  const rules = [
+    [/portfolio|personal|site|www/, 'personal website & portfolio'],
+    [/blog|journal|posts|writing/, 'writing & thoughts'],
+    [/game|puzzle|quiz|play|arcade/, 'browser-based game'],
+    [/todo|task|list|notes?|note-?taking/, 'task & note management'],
+    [/chat|message|talk|discord/, 'messaging or chat interface'],
+    [/music|audio|sound|player|spotify/, 'audio & music tool'],
+    [/weather|forecast|climate/, 'weather dashboard'],
+    [/map|geo|location|place/, 'map & location tool'],
+    [/calc|math|convert|unit/, 'calculator or converter'],
+    [/timer|clock|stopwatch|pomodoro/, 'time tracking utility'],
+    [/draw|paint|canvas|art|sketch/, 'drawing or creative tool'],
+    [/dashboard|stats|analytic|metrics/, 'data & analytics dashboard'],
+    [/api|fetch|scrape|data/, 'data fetching utility'],
+    [/tool|util|helper|gen|generator/, 'developer utility'],
+    [/doc|wiki|guide|docs/, 'documentation & guides'],
+    [/demo|example|sample|template/, 'demo or starter template'],
+    [/css|style|theme|design/, 'CSS experiments & styling'],
+    [/js|javascript|script/, 'JavaScript project'],
+    [/react|vue|svelte|next/, 'frontend web app'],
+    [/python|py/, 'Python project'],
+    [/api/, 'API integration'],
+    [/extension|chrome|firefox/, 'browser extension'],
+  ];
+  for (const [re, desc] of rules) {
+    if (re.test(n)) return desc;
+  }
+  const words = name.replace(/[-_]/g, ' ').split(' ').filter(Boolean);
+  if (words.length === 1) return `${words[0]} — web project`;
+  return words.slice(0, 3).join(' ') + ' — web project';
+}
 
-    // Emoji overrides (still optional – kept from before, lightweight)
-    let emojiOverrides = {};
-    function loadEmojiOverrides() {
-      try {
-        const stored = localStorage.getItem("launcher_emoji_overrides");
-        if (stored) emojiOverrides = JSON.parse(stored);
-      } catch(e) {}
-    }
-    function saveEmojiOverrides() {
-      localStorage.setItem("launcher_emoji_overrides", JSON.stringify(emojiOverrides));
-    }
-    function getEmojiForApp(app) {
-      if (emojiOverrides[app.url]) return emojiOverrides[app.url];
-      return app.originalEmoji;
-    }
+// ── Recent visited ─────────────────────────────────────────────────────────
+function getRecent() {
+  try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); }
+  catch { return []; }
+}
+function addRecent(repo) {
+  let list = getRecent().filter(r => r.name !== repo.name);
+  list.unshift(repo);
+  list = list.slice(0, 3);
+  try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch {}
+}
+function renderRecent() {
+  const list = getRecent();
+  const section = document.getElementById('recentSection');
+  const grid = document.getElementById('recentGrid');
+  if (!list.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  grid.innerHTML = list.map(r => `
+    <a class="recent-card" href="${r.url}" target="_blank" data-name="${r.name}" data-url="${r.url}" data-desc="${r.desc}">
+      <div class="recent-name">${r.name}</div>
+      <div class="recent-desc">${r.desc}</div>
+    </a>
+  `).join('');
+  grid.querySelectorAll('.recent-card').forEach(el => {
+    el.addEventListener('click', () => addRecent({ name: el.dataset.name, url: el.dataset.url, desc: el.dataset.desc }));
+  });
+}
 
-    function getCacheBustedUrl() {
-      return `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated&_=${Date.now()}`;
-    }
+// ── Sort state ─────────────────────────────────────────────────────────────
+let sortMode = localStorage.getItem(SORT_KEY) || 'name';
+let allRepos = [];
 
-    const emojiMap = {
-      tracker:"📊", clock:"⏰", customs:"🧾", dashboard:"📱", secrets:"🔐",
-      tools:"🛠️", notes:"📝", camera:"📷", music:"🎵", weather:"🌤️",
-      calc:"🧮", finance:"💳", budget:"💰", ai:"🤖", chat:"💬", task:"✅",
-      work:"💼", shipping:"🚚", map:"🗺️", portfolio:"🗂️", birthday:"🎂",
-      video:"🎬", game:"🎮", project:"📁"
-    };
-    const fallback = ["📦","🧩","⚙️","🗂️","📁","📌","🪐","🔧"];
+document.querySelectorAll('.sort-btn').forEach(btn => {
+  if (btn.dataset.sort === sortMode) btn.classList.add('active');
+  else btn.classList.remove('active');
 
-    function getEmojiFromName(repoName) {
-      const lower = repoName.toLowerCase();
-      for (const [key, val] of Object.entries(emojiMap)) {
-        if (lower.includes(key)) return val;
-      }
-      let hash = 0;
-      for (let i = 0; i < repoName.length; i++) {
-        hash = ((hash << 5) - hash) + repoName.charCodeAt(i);
-        hash |= 0;
-      }
-      return fallback[Math.abs(hash) % fallback.length];
-    }
+  btn.addEventListener('click', () => {
+    sortMode = btn.dataset.sort;
+    try { localStorage.setItem(SORT_KEY, sortMode); } catch {}
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === sortMode));
+    renderCards(allRepos);
+  });
+});
 
-    function escapeHtml(str) {
-      return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
-    }
+// ── Sort repos ─────────────────────────────────────────────────────────────
+function sortRepos(repos) {
+  if (sortMode === 'name') {
+    return [...repos].sort((a, b) => a.name.localeCompare(b.name));
+  } else {
+    return [...repos].sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+  }
+}
 
-    function getFilteredApps() {
-      const filter = currentFilter.trim().toLowerCase();
-      if (!filter) return apps;
-      return apps.filter(a => a.name.toLowerCase().includes(filter));
-    }
+// ── Search ─────────────────────────────────────────────────────────────────
+const searchEl = document.getElementById('search');
+searchEl.addEventListener('input', () => renderCards(allRepos));
 
-    function renderApps() {
-      if (isLoading) {
-        appsContainer.innerHTML = '';
-        for (let i = 0; i < 6; i++) {
-          const skel = document.createElement('div');
-          skel.className = 'app skeleton';
-          skel.innerHTML = '<div class="emoji">✨</div><div class="label"> </div>';
-          appsContainer.appendChild(skel);
-        }
-        resultCountSpan.innerText = '';
-        return;
-      }
+// ── Render cards ───────────────────────────────────────────────────────────
+function renderCards(repos) {
+  const query = searchEl.value.toLowerCase().trim();
+  const sorted = sortRepos(repos);
+  const filtered = query ? sorted.filter(r => r.name.toLowerCase().includes(query)) : sorted;
 
-      const filtered = getFilteredApps();
-      const total = filtered.length;
-      if (apps.length === 0) {
-        resultCountSpan.innerText = '';
-      } else if (!currentFilter.trim()) {
-        resultCountSpan.innerText = `${total} ${total === 1 ? 'tool' : 'tools'}`;
-      } else {
-        resultCountSpan.innerText = `${total} matching`;
-      }
+  const grid = document.getElementById('cardGrid');
+  const countLabel = document.getElementById('countLabel');
+  const footerCount = document.getElementById('footerCount');
 
-      if (filtered.length === 0) {
-        appsContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">${currentFilter ? '🔍' : '📭'}</div><div class="empty-title">${currentFilter ? 'no tools found' : 'no GitHub Pages apps'}</div><div class="empty-hint">${currentFilter ? 'try a different keyword' : 'repositories with "Pages" enabled will appear here'}</div></div>`;
-        return;
-      }
+  countLabel.textContent = `${filtered.length}`;
+  footerCount.textContent = `${filtered.length} of ${repos.length} sites`;
 
-      appsContainer.innerHTML = '';
-      for (const app of filtered) {
-        const card = document.createElement('a');
-        card.className = 'app';
-        card.href = app.url;
-        const displayEmoji = getEmojiForApp(app);
-        card.innerHTML = `<div class="emoji">${displayEmoji}</div><div class="label">${escapeHtml(app.name)}</div>`;
-        // double-click to change emoji (optional, but not choppy)
-        card.addEventListener('dblclick', (e) => {
-          e.preventDefault();
-          const newEmoji = prompt(`New emoji for "${app.name}"`, displayEmoji);
-          if (newEmoji && newEmoji.trim()) {
-            emojiOverrides[app.url] = newEmoji.trim();
-            saveEmojiOverrides();
-            renderApps();
-          }
-        });
-        card.addEventListener('touchstart', () => { if (navigator.vibrate) navigator.vibrate(5); });
-        appsContainer.appendChild(card);
-      }
-    }
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="state-msg">no projects match "${query}"</div>`;
+    return;
+  }
 
-    function updateTimestamp() {
-      if (!lastUpdated) { timestampSpan.innerText = 'never'; return; }
-      const diff = Date.now() - lastUpdated;
-      const mins = Math.floor(diff / 60000);
-      if (mins < 1) timestampSpan.innerText = 'just now';
-      else if (mins < 60) timestampSpan.innerText = `${mins} min ago`;
-      else if (mins < 1440) timestampSpan.innerText = `${Math.floor(mins / 60)} hr ago`;
-      else timestampSpan.innerText = 'today';
-    }
+  grid.innerHTML = filtered.map((repo, i) => {
+    const url = `https://${USERNAME}.github.io/${repo.name}/`;
+    const desc = describeRepo(repo.name);
+    const idx = String(i + 1).padStart(2, '0');
+    return `
+      <a class="card" href="${url}" target="_blank"
+         data-name="${repo.name}" data-url="${url}" data-desc="${desc.replace(/"/g, '&quot;')}">
+        <span class="card-index">${idx}</span>
+        <div class="card-name">${repo.name}</div>
+        <div class="card-desc">${desc}</div>
+        <span class="card-arrow">↗</span>
+      </a>
+    `;
+  }).join('');
 
-    async function fetchApps(showSpinner = false, silent = false) {
-      if (showSpinner) pullSpinner.style.display = 'inline-block';
-      if (!silent) {
-        isLoading = true;
-        renderApps();
-      } else {
-        updateCheckSpan.innerText = 'checking...';
-      }
-
-      try {
-        const response = await fetch(getCacheBustedUrl(), { cache: 'no-store' });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const repos = await response.json();
-        const eligible = repos.filter(r => r.has_pages === true && !r.fork && !r.archived);
-        const parsed = eligible.map(repo => {
-          let displayName = repo.name.replace(/[-_]/g, ' ').trim();
-          displayName = displayName.replace(/\b\w/g, c => c.toUpperCase());
-          return {
-            name: displayName,
-            url: `https://${USERNAME}.github.io/${repo.name}/`,
-            originalEmoji: getEmojiFromName(repo.name)
-          };
-        });
-        parsed.sort((a, b) => a.name.localeCompare(b.name));
-        apps = parsed;
-        lastUpdated = Date.now();
-        lastFetchTime = Date.now();
-        updateTimestamp();
-        if (!silent) updateCheckSpan.innerText = '';
-        else updateCheckSpan.innerText = '✓ updated';
-        setTimeout(() => { if (updateCheckSpan.innerText === '✓ updated') updateCheckSpan.innerText = ''; }, 2000);
-      } catch (err) {
-        console.error(err);
-        if (!silent) {
-          apps = [];
-          appsContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">network error</div><div class="empty-hint">tap "retry"</div></div>`;
-        } else {
-          updateCheckSpan.innerText = '⚠️ failed';
-          setTimeout(() => { if (updateCheckSpan.innerText === '⚠️ failed') updateCheckSpan.innerText = ''; }, 2000);
-        }
-      } finally {
-        isLoading = false;
-        if (showSpinner) pullSpinner.style.display = 'none';
-        if (!silent) renderApps();
-        if (searchInput.value !== currentFilter) {
-          currentFilter = searchInput.value;
-          renderApps();
-        }
-      }
-    }
-
-    // random global site (lightweight fetch)
-    async function fetchRandomGlobalPagesSite() {
-      const originalText = randomBtn.innerHTML;
-      randomBtn.innerHTML = '🌍 ...';
-      randomBtn.disabled = true;
-      try {
-        const searchUrl = `https://api.github.com/search/repositories?q=has_pages:true&per_page=30&sort=updated`;
-        const response = await fetch(searchUrl, { cache: 'no-store' });
-        if (!response.ok) throw new Error();
-        const data = await response.json();
-        const totalCount = data.total_count;
-        if (totalCount === 0) throw new Error();
-        const maxPage = Math.min(33, Math.floor(totalCount / 30));
-        const randomPage = Math.floor(Math.random() * (maxPage + 1)) + 1;
-        const pageResp = await fetch(`https://api.github.com/search/repositories?q=has_pages:true&per_page=30&sort=updated&page=${randomPage}`, { cache: 'no-store' });
-        if (!pageResp.ok) throw new Error();
-        const pageData = await pageResp.json();
-        const repos = pageData.items;
-        if (!repos.length) throw new Error();
-        const randomRepo = repos[Math.floor(Math.random() * repos.length)];
-        const pagesUrl = `https://${randomRepo.owner.login}.github.io/${randomRepo.name}/`;
-        updateCheckSpan.innerText = `🎲 ${randomRepo.owner.login}/${randomRepo.name}`;
-        setTimeout(() => { if (updateCheckSpan.innerText.includes(randomRepo.owner.login)) updateCheckSpan.innerText = ''; }, 2500);
-        window.open(pagesUrl, '_blank');
-        if (navigator.vibrate) navigator.vibrate(10);
-      } catch (err) {
-        updateCheckSpan.innerText = '⚠️ failed';
-        setTimeout(() => { if (updateCheckSpan.innerText === '⚠️ failed') updateCheckSpan.innerText = ''; }, 2000);
-      } finally {
-        randomBtn.innerHTML = originalText;
-        randomBtn.disabled = false;
-      }
-    }
-
-    randomBtn.addEventListener('click', fetchRandomGlobalPagesSite);
-
-    searchInput.addEventListener('input', (e) => {
-      currentFilter = e.target.value;
-      if (!isLoading) renderApps();
-      clearBtn.classList.toggle('visible', currentFilter.length > 0);
+  grid.querySelectorAll('.card').forEach(el => {
+    el.addEventListener('click', () => {
+      addRecent({ name: el.dataset.name, url: el.dataset.url, desc: el.dataset.desc });
+      setTimeout(renderRecent, 200);
     });
-    clearBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      currentFilter = '';
-      clearBtn.classList.remove('visible');
-      if (!isLoading) renderApps();
-      searchInput.focus();
-    });
-    retryBtn.addEventListener('click', () => fetchApps(true));
+  });
+}
 
-    document.body.addEventListener('touchstart', (e) => {
-      if (!e.target.closest('.app') && e.target !== searchInput && !clearBtn.contains(e.target) && !randomBtn.contains(e.target)) {
-        searchInput.blur();
-      }
-    });
+// ── Fetch repos ────────────────────────────────────────────────────────────
+async function fetchRepos() {
+  try {
+    let page = 1, repos = [];
+    while (true) {
+      const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&page=${page}`);
+      if (!res.ok) throw new Error(`GitHub API: ${res.status}`);
+      const batch = await res.json();
+      if (!batch.length) break;
+      repos = repos.concat(batch.filter(r => r.has_pages));
+      if (batch.length < 100) break;
+      page++;
+    }
+    allRepos = repos;
+    renderCards(allRepos);
+    renderRecent();
+  } catch (err) {
+    document.getElementById('cardGrid').innerHTML =
+      `<div class="state-msg">failed to load — ${err.message}</div>`;
+  }
+}
 
-    let touchStartY = 0, pulling = false;
-    document.body.addEventListener('touchstart', (e) => {
-      if (window.scrollY <= 5) touchStartY = e.touches[0].clientY;
-    });
-    document.body.addEventListener('touchmove', (e) => {
-      if (touchStartY && e.touches[0].clientY - touchStartY > 60 && !isLoading) {
-        pulling = true;
-        e.preventDefault();
-        timestampSpan.innerText = 'release to refresh';
-      }
-    });
-    document.body.addEventListener('touchend', async () => {
-      if (pulling && !isLoading) {
-        pulling = false;
-        await fetchApps(true);
-        updateTimestamp();
-      }
-      touchStartY = 0;
-      pulling = false;
-    });
-
-    window.addEventListener('pageshow', (e) => { if (e.persisted) fetchApps(false, true); });
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && !isLoading && !refreshingFromForeground && (Date.now() - lastFetchTime > 30000)) {
-        refreshingFromForeground = true;
-        fetchApps(false, true).finally(() => refreshingFromForeground = false);
-      }
-    });
-
-    loadEmojiOverrides();
-    fetchApps(false);
-  })();
+fetchRepos();
 </script>
 </body>
 </html>
