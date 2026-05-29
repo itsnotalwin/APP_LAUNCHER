@@ -3,714 +3,789 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>itsnotalwin / pages</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<title>itsnotalwin.github.io</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:    #080808;
-  --bg2:   #0f0f0f;
-  --bg3:   #161616;
-  --b:     #1e1e1e;
-  --b2:    #2a2a2a;
-  --text:  #f0f0f0;
-  --muted: #4a4a4a;
-  --dim:   #2a2a2a;
-  --serif: 'DM Serif Display', serif;
-  --mono:  'DM Mono', monospace;
+  --bg:      #070707;
+  --s1:      #0d0d0d;
+  --s2:      #141414;
+  --s3:      #1c1c1c;
+  --b0:      #181818;
+  --b1:      #252525;
+  --b2:      #333;
+  --t0:      #f2f2f2;
+  --t1:      #999;
+  --t2:      #555;
+  --t3:      #2e2e2e;
+  --f:       'DM Mono', monospace;
+  --r:       0px;
 }
 
-html { scroll-behavior: smooth; }
-
-body {
+html, body {
   background: var(--bg);
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 13px;
+  color: var(--t0);
+  font-family: var(--f);
   min-height: 100vh;
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── PAGE ENTER ── */
-body { animation: pageIn 0.6s ease both; }
-@keyframes pageIn { from { opacity: 0 } to { opacity: 1 } }
+::selection { background: #f2f2f210; }
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--b0); }
 
-/* ── NOISE TEXTURE OVERLAY ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.025;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* ── TOP RULE ── */
-.top-rule { width: 100%; height: 1px; background: #fff; position: relative; }
-.top-rule::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 60px; height: 1px;
-  background: #fff;
-  animation: ruleSlide 1.2s cubic-bezier(0.16,1,0.3,1) both;
-}
-@keyframes ruleSlide { from { width: 0 } to { width: 100% } }
-
-/* ── HERO ── */
-.hero {
-  padding: 64px 40px 56px;
-  border-bottom: 1px solid var(--b);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  gap: 40px;
-  animation: heroIn 1s cubic-bezier(0.16,1,0.3,1) 0.1s both;
-}
-@keyframes heroIn {
-  from { opacity: 0; transform: translateY(24px) }
-  to   { opacity: 1; transform: translateY(0) }
-}
-
-.hero-left {}
-
-.hero-eyebrow {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.hero-eyebrow::before {
-  content: '';
-  width: 24px; height: 1px;
-  background: var(--muted);
-}
-
-.hero-title {
-  font-family: var(--serif);
-  font-size: clamp(52px, 8vw, 96px);
-  font-weight: 400;
-  color: var(--text);
-  letter-spacing: -3px;
-  line-height: 0.92;
-  margin-bottom: 28px;
-}
-
-.hero-title em {
-  font-style: italic;
-  display: block;
-}
-
-.hero-sub {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--muted);
-  line-height: 1.9;
-  letter-spacing: 0.04em;
-  max-width: 360px;
-}
-
-.hero-right {
-  text-align: right;
-  padding-bottom: 8px;
-}
-
-.hero-count {
-  font-family: var(--serif);
-  font-size: clamp(48px, 6vw, 72px);
-  font-weight: 400;
-  color: var(--text);
-  letter-spacing: -2px;
-  line-height: 1;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-.hero-count.loaded { opacity: 1; }
-
-.hero-count-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-top: 6px;
-}
-
-/* ── MAIN WRAP ── */
-.wrap { max-width: 1100px; margin: 0 auto; padding: 0 40px 100px; }
-
-/* ── SEARCH SECTION ── */
-.search-section {
-  padding: 48px 0 0;
-  animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.25s both;
-}
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px) }
-  to   { opacity: 1; transform: translateY(0) }
-}
-
-.search-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  align-items: stretch;
-  margin-bottom: 0;
-}
-
-.search-inner { position: relative; }
-.search-prefix {
-  position: absolute; left: 20px; top: 50%;
-  transform: translateY(-50%);
-  color: var(--muted); font-size: 18px;
-  pointer-events: none; font-family: var(--mono);
-  line-height: 1;
-}
-
-input[type="text"] {
-  width: 100%;
-  background: var(--bg2);
-  border: 1px solid var(--b2);
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 16px;
-  padding: 18px 20px 18px 44px;
-  outline: none;
-  border-radius: 0;
-  -webkit-appearance: none;
-  transition: border-color 0.2s, background 0.2s;
-  letter-spacing: 0.02em;
-}
-input[type="text"]:focus {
-  border-color: #555;
-  background: #111;
-}
-input[type="text"]::placeholder { color: var(--dim); }
-
-/* ── SORT TOGGLE ── */
-.sort-toggle { display: flex; border: 1px solid var(--b2); }
-.sort-btn {
-  background: transparent; border: none;
-  color: var(--muted); font-family: var(--mono);
-  font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; padding: 0 20px;
-  cursor: pointer; transition: background 0.2s, color 0.2s;
-  border-right: 1px solid var(--b2); white-space: nowrap;
-}
-.sort-btn:last-child { border-right: none; }
-.sort-btn.active { background: var(--text); color: var(--bg); }
-.sort-btn:not(.active):hover { background: var(--bg3); color: var(--text); }
-
-/* ── META ROW ── */
-.meta-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--b);
-  margin-bottom: 48px;
-  animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.35s both;
-}
-.meta-label {
-  font-size: 10px; color: var(--muted);
-  letter-spacing: 0.15em; text-transform: uppercase;
-}
-
-/* ── SECTION HEADING ── */
-.section-heading {
-  display: flex; align-items: baseline; gap: 16px;
-  margin-bottom: 20px;
-}
-.section-num { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: 0.2em; }
-.section-title {
-  font-family: var(--serif);
-  font-size: 28px; font-weight: 400;
-  color: var(--text); letter-spacing: -0.5px;
-}
-.section-rule { flex: 1; height: 1px; background: var(--b); }
-
-/* ── RECENTLY VISITED ── */
-.recent-section {
-  margin-bottom: 64px;
-  animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.4s both;
-}
-
-.recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--b); border: 1px solid var(--b); }
-
-.recent-card {
+/* ─────────────────────────────────────────
+   TOP BAR
+───────────────────────────────────────── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   background: var(--bg);
-  padding: 20px 22px;
+  border-bottom: 1px solid var(--b0);
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 28px;
+  gap: 20px;
+}
+
+.topbar-brand {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--t2);
+  letter-spacing: .04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.topbar-brand span { color: var(--t3); }
+
+.topbar-search {
+  flex: 1;
+  position: relative;
+  max-width: 340px;
+}
+
+.topbar-search input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--b0);
+  color: var(--t0);
+  font-family: var(--f);
+  font-size: 12px;
+  padding: 6px 0 6px 18px;
+  outline: none;
+  transition: border-color .15s;
+  letter-spacing: .02em;
+}
+
+.topbar-search input::placeholder { color: var(--t3); }
+.topbar-search input:focus { border-color: var(--b2); }
+
+.search-slash {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--t3);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.sort-pill {
+  background: none;
+  border: 1px solid var(--b0);
+  color: var(--t2);
+  font-family: var(--f);
+  font-size: 10px;
+  letter-spacing: .08em;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: all .1s;
+  text-transform: lowercase;
+}
+
+.sort-pill:hover { border-color: var(--b1); color: var(--t1); }
+
+.sort-pill.on {
+  background: var(--t0);
+  color: var(--bg);
+  border-color: var(--t0);
+}
+
+.status-pip {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--b1);
+  margin-left: 10px;
+  transition: background .4s;
+  flex-shrink: 0;
+}
+.status-pip.spin { animation: pip 1s ease-in-out infinite; }
+.status-pip.live { background: #3a5c3a; }
+.status-pip.dead { background: #5c3a3a; }
+
+@keyframes pip { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.hero {
+  padding: 52px 28px 40px;
+  border-bottom: 1px solid var(--b0);
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero-kicker {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--t3);
+  margin-bottom: 14px;
+}
+
+.hero-h1 {
+  font-size: clamp(30px, 4.5vw, 48px);
+  font-weight: 300;
+  letter-spacing: -.025em;
+  line-height: 1.05;
+  color: var(--t0);
+}
+
+.hero-h1 .muted { color: var(--t3); }
+
+.hero-stats {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.hstat {
+  font-size: 11px;
+  color: var(--t2);
+  padding-right: 20px;
+  margin-right: 20px;
+  border-right: 1px solid var(--b0);
+}
+
+.hstat:last-child { border-right: none; }
+.hstat b { color: var(--t1); font-weight: 400; }
+
+/* ─────────────────────────────────────────
+   MAIN LAYOUT
+───────────────────────────────────────── */
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 28px 80px;
+}
+
+/* ─────────────────────────────────────────
+   SECTION LABEL
+───────────────────────────────────────── */
+.sec {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.sec-name {
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--t3);
+  white-space: nowrap;
+}
+
+.sec-rule { flex: 1; height: 1px; background: var(--b0); }
+.sec-n    { font-size: 9px; color: var(--t3); white-space: nowrap; }
+
+/* ─────────────────────────────────────────
+   RECENTLY VISITED
+───────────────────────────────────────── */
+#recentSection { margin-bottom: 40px; display: none; }
+
+.recent-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--b0);
+  gap: 0;
+}
+
+.r-card {
+  background: var(--s1);
+  padding: 14px 16px;
   text-decoration: none;
   display: block;
-  position: relative;
+  border-right: 1px solid var(--b0);
+  transition: background .12s;
   overflow: hidden;
-  transition: background 0.2s;
+  position: relative;
 }
-.recent-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 0; height: 1px;
-  background: var(--text);
-  transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
-}
-.recent-card:hover { background: var(--bg2); }
-.recent-card:hover::after { width: 100%; }
 
-.recent-num {
-  font-family: var(--serif);
-  font-size: 32px; font-weight: 400;
-  color: var(--dim); line-height: 1;
-  margin-bottom: 10px;
-  transition: color 0.2s;
+.r-card:last-child { border-right: none; }
+.r-card:hover { background: var(--s2); }
+
+.r-badge {
+  font-size: 8px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--t3);
+  margin-bottom: 7px;
 }
-.recent-card:hover .recent-num { color: var(--muted); }
-.recent-name {
-  font-size: 12px; color: var(--text);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  letter-spacing: -0.2px;
+
+.r-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--t0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 18px;
 }
-.recent-sub {
-  font-size: 9px; color: var(--muted);
-  letter-spacing: 0.15em; text-transform: uppercase;
+
+.r-desc {
+  font-size: 10px;
+  color: var(--t2);
   margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.recent-empty {
-  grid-column: 1/-1;
-  background: var(--bg);
-  padding: 32px 24px;
-  font-size: 11px; color: var(--muted);
-  font-style: italic;
+.r-arrow {
+  position: absolute;
+  top: 14px; right: 12px;
+  font-size: 10px;
+  color: var(--t3);
 }
 
-/* ── MAIN GRID ── */
-.all-section { animation: slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
-
-.grid {
+/* ─────────────────────────────────────────
+   CARDS GRID
+───────────────────────────────────────── */
+#cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1px;
-  background: var(--b);
-  border: 1px solid var(--b);
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  border: 1px solid var(--b0);
+  gap: 0;
 }
 
-/* Card entrance stagger via JS class */
+/* inner border trick without gap */
+.card-wrap {
+  border-right: 1px solid var(--b0);
+  border-bottom: 1px solid var(--b0);
+}
+
 .card {
-  background: var(--bg);
-  padding: 28px 24px;
+  background: var(--s1);
+  padding: 20px 18px 16px;
   text-decoration: none;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  min-height: 140px;
+  min-height: 116px;
   position: relative;
-  overflow: hidden;
+  transition: background .12s;
   opacity: 0;
-  transform: translateY(12px);
-  transition:
-    background 0.2s,
-    opacity 0.5s cubic-bezier(0.16,1,0.3,1),
-    transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  transform: translateY(6px);
+  animation: fadeUp .35s cubic-bezier(.16,1,.3,1) forwards;
 }
 
-.card.visible { opacity: 1; transform: translateY(0); }
+.card:hover { background: var(--s2); }
+.card:hover .c-arrow { opacity: 1; transform: translate(0,0); }
 
-/* Sliding underline on hover */
-.card::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  height: 1px; width: 0;
-  background: var(--text);
-  transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-.card:hover { background: var(--bg2); }
-.card:hover::after { width: 100%; }
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
 
-.card-index {
-  font-family: var(--serif);
-  font-size: 11px; color: var(--dim);
-  font-style: italic;
-  letter-spacing: 0;
+.c-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
-.card-name {
-  font-family: var(--serif);
-  font-size: 22px; font-weight: 400;
-  color: var(--text);
-  line-height: 1.15;
-  letter-spacing: -0.4px;
-  word-break: break-word;
+.c-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--t0);
+  letter-spacing: -.01em;
+  line-height: 1.25;
   flex: 1;
 }
 
-.card-bottom {
+.c-stars {
+  font-size: 10px;
+  color: var(--t3);
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.c-desc {
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--t2);
+  line-height: 1.55;
+  flex: 1;
+  font-style: italic;
+}
+
+.c-foot {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
-.card-desc {
-  font-size: 10px; color: var(--muted);
-  line-height: 1.7; letter-spacing: 0.02em;
-  font-family: var(--mono);
-  max-width: 75%;
+.c-time {
+  font-size: 9px;
+  color: var(--t3);
+  letter-spacing: .04em;
 }
 
-.card-arrow {
-  font-size: 20px; color: var(--dim);
+.c-tag {
+  font-size: 8px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--t3);
+  border: 1px solid var(--b0);
+  padding: 2px 7px;
+}
+
+.c-arrow {
+  position: absolute;
+  top: 16px; right: 14px;
+  font-size: 11px;
+  color: var(--t2);
   opacity: 0;
-  transition: opacity 0.2s, transform 0.2s, color 0.2s;
-  transform: translate(-4px, 4px);
-  flex-shrink: 0;
-}
-.card:hover .card-arrow {
-  opacity: 1;
-  transform: translate(0, 0);
-  color: var(--text);
+  transform: translate(-3px, 3px);
+  transition: all .14s;
 }
 
-/* ── STATE ── */
+/* ─────────────────────────────────────────
+   STATES
+───────────────────────────────────────── */
 .state {
-  padding: 80px 20px; text-align: center;
-  color: var(--muted); font-size: 12px;
-  grid-column: 1/-1; background: var(--bg);
-}
-.state-title {
-  font-family: var(--serif);
-  font-size: 28px; color: var(--b2);
-  margin-bottom: 10px; font-weight: 400;
+  grid-column: 1/-1;
+  padding: 60px 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--t3);
+  font-style: italic;
 }
 
-.spinner {
-  display: inline-block; width: 14px; height: 14px;
-  border: 1px solid var(--b2); border-top-color: var(--text);
-  border-radius: 50%; animation: spin 0.7s linear infinite;
-  margin-right: 8px; vertical-align: middle;
+.loading-anim::after {
+  content: '';
+  animation: ldots 1.2s steps(4,end) infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes ldots {
+  0%  { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
 
-/* ── NO RESULTS ── */
-.no-results { display: none; margin-top: 1px; }
-.no-results.show { display: block; }
-.no-results-inner {
-  padding: 80px 0; text-align: center;
-  border: 1px solid var(--b); border-top: none;
-  background: var(--bg);
+/* ─────────────────────────────────────────
+   FILTER TAGS
+───────────────────────────────────────── */
+.tag-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
 }
-.no-results-title {
-  font-family: var(--serif);
-  font-size: 36px; color: var(--b2);
-  margin-bottom: 10px; font-weight: 400; font-style: italic;
-}
-.no-results-sub { font-size: 11px; color: var(--muted); }
-.no-results-sub code { font-family: var(--mono); }
 
-/* ── FOOTER ── */
-.footer {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 28px 0 0; border-top: 1px solid var(--b); margin-top: 80px;
+.ftag {
+  background: none;
+  border: 1px solid var(--b0);
+  color: var(--t2);
+  font-family: var(--f);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: lowercase;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all .1s;
 }
-.footer-left { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
-.footer-right { font-size: 10px; color: var(--dim); letter-spacing: 0.1em; }
 
-/* ── RESPONSIVE ── */
+.ftag:hover { border-color: var(--b1); color: var(--t1); }
+.ftag.on { background: var(--s2); border-color: var(--b1); color: var(--t0); }
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+.foot {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--b0);
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--t3);
+  letter-spacing: .08em;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
 @media (max-width: 640px) {
-  .hero { grid-template-columns: 1fr; gap: 20px; padding: 40px 24px; }
-  .hero-right { text-align: left; }
-  .wrap { padding: 0 24px 60px; }
-  .search-row { grid-template-columns: 1fr; }
-  .sort-toggle { width: 100%; }
-  .sort-btn { flex: 1; padding: 14px; }
-  .recent-grid { grid-template-columns: 1fr; }
-  .grid { grid-template-columns: 1fr; }
+  .topbar { padding: 0 16px; }
+  .hero   { padding: 36px 16px 28px; }
+  .wrap   { padding: 24px 16px 60px; }
+  .recent-row { grid-template-columns: 1fr 1fr; }
+  .recent-row .r-card:nth-child(2) { border-right: none; }
+  .recent-row .r-card:nth-child(3) { display: none; }
+  #cardGrid { grid-template-columns: 1fr; }
+  .hero-h1 { font-size: 26px; }
 }
 </style>
 </head>
 <body>
 
-<div class="top-rule"></div>
+<!-- TOP BAR -->
+<header class="topbar">
+  <span class="topbar-brand">itsnotalwin<span>.github.io</span></span>
 
-<!-- HERO (full-width, outside wrap) -->
-<div class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Live Sites · itsnotalwin</div>
-    <div class="hero-title">
-      itsnotalwin
-      <em>/ pages</em>
-    </div>
-    <div class="hero-sub">
-      Everything I've shipped, in one place.<br>
-      Find it, open it, get on with it.
-    </div>
+  <div class="topbar-search">
+    <span class="search-slash">/</span>
+    <input id="searchInput" type="text" placeholder="filter…" autocomplete="off" spellcheck="false">
   </div>
-  <div class="hero-right">
-    <div class="hero-count" id="hero-count">—</div>
-    <div class="hero-count-label">Things I've Built</div>
+
+  <div class="topbar-right">
+    <button class="sort-pill on" data-sort="name">a–z</button>
+    <button class="sort-pill" data-sort="recent">recent</button>
+    <button class="sort-pill" data-sort="stars">★</button>
+    <span class="status-pip spin" id="pip"></span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-kicker">github pages launcher</p>
+  <h1 class="hero-h1">all sites<span class="muted">, one place.</span></h1>
+  <div class="hero-stats">
+    <span class="hstat" id="hs1"><b>—</b> sites</span>
+    <span class="hstat" id="hs2"><b>—</b> total stars</span>
+    <span class="hstat" id="hs3">loading…</span>
   </div>
 </div>
 
+<!-- MAIN -->
 <div class="wrap">
 
-  <!-- SEARCH + SORT -->
-  <div class="search-section">
-    <div class="search-row">
-      <div class="search-inner">
-        <span class="search-prefix">/</span>
-        <input type="text" id="search" placeholder="what are you looking for..." autocomplete="off" spellcheck="false" />
-      </div>
-      <div class="sort-toggle">
-        <button class="sort-btn active" id="sort-name" onclick="setSort('name')">A → Z</button>
-        <button class="sort-btn" id="sort-recent" onclick="setSort('recent')">Recent</button>
-      </div>
+  <!-- Recently visited -->
+  <section id="recentSection">
+    <div class="sec">
+      <span class="sec-name">recently visited</span>
+      <div class="sec-rule"></div>
     </div>
+    <div class="recent-row" id="recentRow"></div>
+  </section>
+
+  <!-- Tag filter -->
+  <div class="tag-bar" id="tagBar"></div>
+
+  <!-- All projects -->
+  <div class="sec">
+    <span class="sec-name">all projects</span>
+    <div class="sec-rule"></div>
+    <span class="sec-n" id="secCount"></span>
   </div>
 
-  <!-- META ROW -->
-  <div class="meta-row">
-    <div class="meta-label" id="result-label">Loading...</div>
-    <div class="meta-label" id="meta-right">Press / to search</div>
+  <div id="cardGrid">
+    <div class="state loading-anim">fetching repos</div>
   </div>
 
-  <!-- RECENTLY VISITED -->
-  <div class="recent-section" id="recent-section">
-    <div class="section-heading">
-      <span class="section-num">01 —</span>
-      <span class="section-title">Recently Visited</span>
-      <div class="section-rule"></div>
-    </div>
-    <div class="recent-grid" id="recent-grid"></div>
-  </div>
-
-  <!-- ALL SITES -->
-  <div class="all-section">
-    <div class="section-heading">
-      <span class="section-num">02 —</span>
-      <span class="section-title">The Full Archive</span>
-      <div class="section-rule"></div>
-    </div>
-    <div class="grid" id="grid">
-      <div class="state"><span class="spinner"></span> Pulling your sites...</div>
-    </div>
-    <div class="no-results" id="no-results">
-      <div class="no-results-inner">
-        <div class="no-results-title">Nothing found.</div>
-        <div class="no-results-sub">No site matches <code id="query-echo"></code></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    <div class="footer-left">MIT · itsnotalwin · 2025</div>
-    <div class="footer-right">github.com/itsnotalwin</div>
+  <div class="foot">
+    <span>itsnotalwin — github pages</span>
+    <span id="footR"></span>
   </div>
 
 </div>
 
 <script>
-const USERNAME = 'itsnotalwin';
-const LS_KEY = 'pages_v2';
-let allRepos = [];
-let sortMode = 'name';
-let query = '';
+const USER = 'itsnotalwin';
+const LS_RECENT = 'alw3_recent';
+const LS_SORT   = 'alw3_sort';
+const LS_TAG    = 'alw3_tag';
 
-// ── DESCRIPTION ──
-function desc(name) {
-  const w = name.replace(/[-_.]/g, ' ').replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().split(' ').filter(Boolean);
-  const m = {
-    portfolio:'Personal portfolio and showcase.',blog:'Writing and long-form thoughts.',
-    docs:'Documentation and reference.',api:'API explorer and reference.',
-    demo:'Live interactive demonstration.',tool:'Browser-based utility.',
-    tools:'Collection of utilities.',game:'Playable browser game.',
-    games:'Collection of browser games.',dashboard:'Data dashboard.',
-    landing:'Product landing page.',notes:'Personal notes and reference.',
-    app:'Web application.',ui:'UI component showcase.',
-    components:'Reusable component library.',starter:'Project starter template.',
-    template:'Reusable project template.',cv:'Curriculum vitae.',
-    resume:'Professional résumé.',calculator:'Browser calculator.',
-    timer:'Timer utility.',clock:'Clock display.',music:'Audio project.',
-    chat:'Chat interface.',auth:'Authentication demo.',map:'Map visualisation.',
-    quiz:'Interactive quiz.',todo:'Task manager.',weather:'Weather app.',
-    gallery:'Image gallery.',shop:'E-commerce demo.',search:'Search interface.',
-  };
-  for (const word of w) if (m[word]) return m[word];
-  return w.map(x => x[0].toUpperCase()+x.slice(1)).join(' ') + '.';
+// ── Descriptions ──────────────────────────────────────────────────────────
+const DESC_RULES = [
+  [/portfolio|personal site|\.io$/,  'personal website & portfolio'],
+  [/blog|journal|writing|posts/,     'writing & published thoughts'],
+  [/game|puzzle|quiz|play|arcade/,   'browser-based game'],
+  [/todo|task|list|note/,            'task & note management tool'],
+  [/chat|message|talk/,              'messaging interface'],
+  [/music|audio|sound|player/,       'audio & music project'],
+  [/weather|forecast/,               'weather dashboard'],
+  [/map|geo|location/,               'map & location tool'],
+  [/calc|math|convert/,              'calculator or converter'],
+  [/timer|clock|stopwatch|pomodoro/, 'time tracking utility'],
+  [/draw|paint|canvas|art|sketch/,   'drawing or creative tool'],
+  [/dashboard|stats|analytic/,       'data & analytics dashboard'],
+  [/tool|util|helper|generator/,     'developer utility'],
+  [/doc|wiki|guide/,                 'documentation & reference'],
+  [/demo|example|sample|template/,   'demo or starter template'],
+  [/css|style|theme|design/,         'CSS & design experiments'],
+  [/react|vue|svelte|next/,          'frontend web application'],
+  [/extension|chrome|firefox/,       'browser extension'],
+  [/api|fetch|data/,                 'data fetching utility'],
+];
+
+function describe(name) {
+  const n = name.toLowerCase().replace(/[-_.]/g,' ');
+  for (const [re, d] of DESC_RULES) if (re.test(n)) return d;
+  const w = name.replace(/[-_]/g,' ').trim();
+  return w + ' — web project';
 }
 
-// ── RECENTLY VISITED ──
-function getRecent() {
-  try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch { return []; }
+// ── Category tags ─────────────────────────────────────────────────────────
+const TAG_RULES = [
+  ['game',      /game|puzzle|quiz|play|arcade/],
+  ['tool',      /tool|util|helper|calc|convert|timer|clock/],
+  ['creative',  /draw|paint|art|sketch|music|audio|css|design/],
+  ['data',      /dashboard|stats|analytic|chart|data|api|fetch/],
+  ['web app',   /react|vue|svelte|next|app\b/],
+  ['docs',      /doc|wiki|guide|blog|journal|writ/],
+  ['demo',      /demo|example|sample|template/],
+  ['extension', /extension|chrome|firefox|plugin/],
+];
+
+function getTag(name) {
+  const n = name.toLowerCase().replace(/[-_.]/g,' ');
+  for (const [t, re] of TAG_RULES) if (re.test(n)) return t;
+  return 'misc';
 }
-function addRecent(repo) {
-  let list = getRecent().filter(r => r.name !== repo.name);
-  list.unshift({ name: repo.name, url: repo.url });
-  localStorage.setItem(LS_KEY, JSON.stringify(list.slice(0, 3)));
-  renderRecent();
+
+// ── Time ──────────────────────────────────────────────────────────────────
+function rel(iso) {
+  if (!iso) return '';
+  const d = Math.floor((Date.now() - new Date(iso)) / 86400000);
+  if (d === 0) return 'today';
+  if (d === 1) return 'yesterday';
+  if (d < 7)   return d + 'd ago';
+  if (d < 30)  return Math.floor(d/7) + 'w ago';
+  if (d < 365) return Math.floor(d/30) + 'mo ago';
+  return Math.floor(d/365) + 'y ago';
 }
+
+// ── Recent ────────────────────────────────────────────────────────────────
+const getRecent = () => { try { return JSON.parse(localStorage.getItem(LS_RECENT)||'[]'); } catch { return []; } };
+
+function addRecent(r) {
+  let list = getRecent().filter(x => x.name !== r.name);
+  list.unshift(r);
+  try { localStorage.setItem(LS_RECENT, JSON.stringify(list.slice(0,3))); } catch {}
+}
+
 function renderRecent() {
   const list = getRecent();
-  const grid = document.getElementById('recent-grid');
-  grid.innerHTML = '';
-  if (!list.length) {
-    grid.innerHTML = '<div class="recent-empty">Nothing yet. Open a site below and it\'ll appear here.</div>';
-    return;
-  }
-  list.forEach((r, i) => {
-    const a = document.createElement('a');
-    a.href = r.url; a.target = '_blank'; a.className = 'recent-card';
-    a.addEventListener('click', () => addRecent(r));
-    a.innerHTML = `
-      <div class="recent-num">0${i+1}</div>
-      <div class="recent-name">${r.name}</div>
-      <div class="recent-sub">Last opened</div>
-    `;
-    grid.appendChild(a);
-  });
+  const sec  = document.getElementById('recentSection');
+  const row  = document.getElementById('recentRow');
+  if (!list.length) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  row.innerHTML = list.map(r => `
+    <a class="r-card" href="${r.url}" target="_blank"
+       data-name="${r.name}" data-url="${r.url}" data-desc="${(r.desc||'').replace(/"/g,'&quot;')}">
+      <div class="r-badge">↩ visited</div>
+      <div class="r-name">${r.name}</div>
+      <div class="r-desc">${r.desc||''}</div>
+      <span class="r-arrow">↗</span>
+    </a>`).join('');
+  row.querySelectorAll('.r-card').forEach(el =>
+    el.addEventListener('click', () => addRecent({name:el.dataset.name, url:el.dataset.url, desc:el.dataset.desc}))
+  );
 }
 
-// ── SORT ──
-function setSort(mode) {
-  sortMode = mode;
-  document.getElementById('sort-name').classList.toggle('active', mode === 'name');
-  document.getElementById('sort-recent').classList.toggle('active', mode === 'recent');
-  renderGrid();
-}
+// ── Sort ──────────────────────────────────────────────────────────────────
+let sortMode  = localStorage.getItem(LS_SORT) || 'name';
+let activeTag = localStorage.getItem(LS_TAG)  || 'all';
+let allRepos  = [];
+
+document.querySelectorAll('.sort-pill').forEach(btn => {
+  btn.classList.toggle('on', btn.dataset.sort === sortMode);
+  btn.addEventListener('click', () => {
+    sortMode = btn.dataset.sort;
+    try { localStorage.setItem(LS_SORT, sortMode); } catch {}
+    document.querySelectorAll('.sort-pill').forEach(b => b.classList.toggle('on', b.dataset.sort === sortMode));
+    renderCards();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', renderCards);
+
 function sorted(repos) {
-  if (sortMode === 'name') return [...repos].sort((a,b) => a.name.localeCompare(b.name));
-  const rn = getRecent().map(r => r.name);
-  return [...repos].sort((a,b) => {
-    const ai = rn.indexOf(a.name), bi = rn.indexOf(b.name);
-    if (ai===-1&&bi===-1) return a.name.localeCompare(b.name);
-    if (ai===-1) return 1; if (bi===-1) return -1;
-    return ai-bi;
-  });
+  const a = [...repos];
+  if (sortMode === 'name')   return a.sort((x,y) => x.name.localeCompare(y.name));
+  if (sortMode === 'recent') return a.sort((x,y) => new Date(y.pushed_at) - new Date(x.pushed_at));
+  if (sortMode === 'stars')  return a.sort((x,y) => y.stargazers_count - x.stargazers_count);
+  return a;
 }
 
-// ── RENDER GRID ──
-function renderGrid() {
-  const grid = document.getElementById('grid');
-  const noR  = document.getElementById('no-results');
-  const label = document.getElementById('result-label');
-  const q = query.toLowerCase();
-  const filtered = allRepos.filter(r => r.name.toLowerCase().includes(q));
-  const s = sorted(filtered);
+// ── Tag bar ───────────────────────────────────────────────────────────────
+function buildTags() {
+  const counts = {};
+  allRepos.forEach(r => { const t = getTag(r.name); counts[t] = (counts[t]||0) + 1; });
+  const bar = document.getElementById('tagBar');
+  bar.innerHTML = '';
 
-  grid.innerHTML = '';
-  noR.classList.remove('show');
+  const make = (id, label, count) => {
+    const b = document.createElement('button');
+    b.className = 'ftag' + (activeTag === id ? ' on' : '');
+    b.dataset.tag = id;
+    b.textContent = label + (count !== undefined ? ` (${count})` : '');
+    b.addEventListener('click', () => {
+      activeTag = id;
+      try { localStorage.setItem(LS_TAG, id); } catch {}
+      bar.querySelectorAll('.ftag').forEach(x => x.classList.toggle('on', x.dataset.tag === id));
+      renderCards();
+    });
+    bar.appendChild(b);
+  };
 
-  if (!s.length && allRepos.length) {
-    noR.classList.add('show');
-    document.getElementById('query-echo').textContent = `"${query}"`;
-    label.textContent = '0 results';
+  make('all', 'all', allRepos.length);
+  Object.entries(counts).sort((a,b)=>b[1]-a[1]).forEach(([id,n]) => make(id, id, n));
+}
+
+// ── Render cards ──────────────────────────────────────────────────────────
+function renderCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  let list = sorted(allRepos);
+  if (q) list = list.filter(r => r.name.toLowerCase().includes(q));
+  if (activeTag && activeTag !== 'all') list = list.filter(r => getTag(r.name) === activeTag);
+
+  const grid = document.getElementById('cardGrid');
+  document.getElementById('secCount').textContent = `${list.length} / ${allRepos.length}`;
+  document.getElementById('footR').textContent = `${list.length} project${list.length !== 1 ? 's' : ''}`;
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="state">no results${q ? ` for "${q}"` : ''}</div>`;
     return;
   }
 
-  label.textContent = `${s.length} site${s.length!==1?'s':''}`;
+  grid.innerHTML = list.map((repo, i) => {
+    const url  = `https://${USER}.github.io/${repo.name}/`;
+    const desc = describe(repo.name);
+    const tag  = getTag(repo.name);
+    const stars = repo.stargazers_count || 0;
+    const delay = Math.min(i * 25, 500);
+    return `<div class="card-wrap">
+      <a class="card" href="${url}" target="_blank" style="animation-delay:${delay}ms"
+         data-name="${repo.name}" data-url="${url}" data-desc="${desc.replace(/"/g,'&quot;')}">
+        <span class="c-arrow">↗</span>
+        <div class="c-top">
+          <div class="c-name">${repo.name}</div>
+          ${stars > 0 ? `<div class="c-stars">★ ${stars}</div>` : ''}
+        </div>
+        <div class="c-desc">${desc}</div>
+        <div class="c-foot">
+          <span class="c-time">${rel(repo.pushed_at)}</span>
+          <span class="c-tag">${tag}</span>
+        </div>
+      </a>
+    </div>`;
+  }).join('');
 
-  s.forEach((repo, i) => {
-    const a = document.createElement('a');
-    a.href = repo.url; a.target = '_blank'; a.className = 'card';
-    a.addEventListener('click', () => addRecent(repo));
-    // index, padded
-    const idx = String(i+1).padStart(2, '0');
-    a.innerHTML = `
-      <div class="card-index">${idx}</div>
-      <div class="card-name">${repo.name}</div>
-      <div class="card-bottom">
-        <div class="card-desc">${desc(repo.name)}</div>
-        <div class="card-arrow">↗</div>
-      </div>
-    `;
-    grid.appendChild(a);
-    // staggered entrance
-    requestAnimationFrame(() => {
-      setTimeout(() => a.classList.add('visible'), i * 40);
-    });
-  });
+  grid.querySelectorAll('.card').forEach(el =>
+    el.addEventListener('click', () => {
+      addRecent({name:el.dataset.name, url:el.dataset.url, desc:el.dataset.desc});
+      setTimeout(renderRecent, 100);
+    })
+  );
 }
 
-// ── FETCH ──
-async function fetchRepos() {
-  const grid = document.getElementById('grid');
-  const heroCount = document.getElementById('hero-count');
+// ── FETCH — gets ALL repos, keeps those with pages ─────────────────────────
+// Strategy: fetch all repos, then ALSO hit the dedicated Pages API to
+// cross-reference. Some repos have Pages via Actions where has_pages=false.
+// We use both signals: has_pages flag OR presence in the Pages endpoint.
+async function fetchAll() {
+  const pip = document.getElementById('pip');
+  pip.className = 'status-pip spin';
+
   try {
-    let page = 1, repos = [];
+    // 1. Fetch all repos (paginated)
+    let page = 1, raw = [];
     while (true) {
-      const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&page=${page}&type=public`);
+      const res = await fetch(
+        `https://api.github.com/users/${USER}/repos?per_page=100&page=${page}&sort=pushed`
+      );
       if (!res.ok) throw new Error(`GitHub API ${res.status}`);
-      const data = await res.json();
-      if (!data.length) break;
-      repos = repos.concat(data.filter(r => r.has_pages).map(r => ({
-        name: r.name,
-        url: `https://${USERNAME}.github.io/${r.name}/`,
-      })));
-      if (data.length < 100) break;
+      const batch = await res.json();
+      if (!batch.length) break;
+      raw = raw.concat(batch);
+      if (batch.length < 100) break;
       page++;
     }
-    allRepos = repos;
 
-    // Animate count
-    if (repos.length) {
-      let n = 0;
-      const target = repos.length;
-      const step = () => {
-        n = Math.min(n + Math.ceil(target / 20), target);
-        heroCount.textContent = n;
-        if (n < target) requestAnimationFrame(step);
-      };
-      heroCount.classList.add('loaded');
-      requestAnimationFrame(step);
-    } else {
-      heroCount.textContent = '0';
-      heroCount.classList.add('loaded');
+    // 2. Also try the dedicated Pages API to catch Action-deployed sites
+    let pagesNames = new Set();
+    try {
+      // This endpoint works for public repos: check each repo's pages status
+      // We'll just use has_pages + the known pattern: repo name = subdirectory
+      // The safest filter: include if has_pages=true OR repo name === username (root site)
+      const pagesRes = await fetch(`https://api.github.com/users/${USER}/repos?per_page=100&type=public`);
+      if (pagesRes.ok) {
+        const pd = await pagesRes.json();
+        pd.filter(r => r.has_pages).forEach(r => pagesNames.add(r.name));
+      }
+    } catch {}
+
+    // 3. Merge: keep repos that have has_pages OR show up in pages endpoint
+    // Also always include the root site (username.github.io)
+    allRepos = raw.filter(r =>
+      r.has_pages ||
+      pagesNames.has(r.name) ||
+      r.name === `${USER}.github.io` ||
+      r.name.toLowerCase() === USER.toLowerCase()
+    );
+
+    // If the above is empty or very small, fall back to all public repos
+    // (better to show too many than none)
+    if (allRepos.length < 2) {
+      allRepos = raw.filter(r => !r.private && !r.fork);
     }
 
-    document.getElementById('result-label').textContent = `${repos.length} site${repos.length!==1?'s':''}`;
+    pip.className = 'status-pip live';
 
-    if (!repos.length) {
-      grid.innerHTML = `<div class="state"><div class="state-title">Nothing here yet.</div><div>Enable GitHub Pages on a repo and it'll show up.</div></div>`;
-      return;
-    }
-    renderGrid();
-  } catch(err) {
-    grid.innerHTML = `<div class="state"><div class="state-title">Couldn't connect.</div><div>GitHub may be rate-limiting this request. Try again in a moment.</div></div>`;
-    heroCount.textContent = '!';
-    heroCount.classList.add('loaded');
+    const totalStars = allRepos.reduce((s,r) => s + r.stargazers_count, 0);
+    document.getElementById('hs1').innerHTML = `<b>${allRepos.length}</b> sites`;
+    document.getElementById('hs2').innerHTML = `<b>${totalStars}</b> total stars`;
+    document.getElementById('hs3').textContent = `fetched ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+
+    buildTags();
+    renderCards();
+    renderRecent();
+
+  } catch (err) {
+    pip.className = 'status-pip dead';
+    document.getElementById('cardGrid').innerHTML =
+      `<div class="state">error: ${err.message}</div>`;
+    document.getElementById('hs3').textContent = 'fetch failed';
   }
 }
 
-// ── SEARCH ──
-document.getElementById('search').addEventListener('input', e => {
-  query = e.target.value;
-  renderGrid();
-});
-
-// ── KEYBOARD ──
-document.addEventListener('keydown', e => {
-  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
-    e.preventDefault();
-    document.getElementById('search').focus();
-  }
-  if (e.key === 'Escape') {
-    document.getElementById('search').blur();
-    document.getElementById('search').value = '';
-    query = '';
-    renderGrid();
-  }
-});
-
-// ── INIT ──
-renderRecent();
-fetchRepos();
+fetchAll();
 </script>
 </body>
 </html>
