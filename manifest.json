@@ -1,0 +1,15 @@
+{
+  "name": "itsnotalwin Launcher",
+  "short_name": "alwin.io",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
