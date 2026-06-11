@@ -1,54 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>itsnotalwin.github.io</title>
-<link rel="manifest" href="manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="All of itsnotalwin's GitHub Pages sites — one place to browse, explore, and launch.">
+  <meta name="theme-color" content="#050505" id="themeColorMeta">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Launchpad">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Launchpad — itsnotalwin">
+  <meta property="og:description" content="All GitHub Pages sites, one place.">
+  <meta property="og:type" content="website">
+
+  <title>Launchpad — itsnotalwin</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-512.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+  <style>
 /* ─────────────────────────────────────────
-   CORE RESET & VARIABLES
+   RESET & CUSTOM PROPERTIES
 ───────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* DARK THEME */
-  --bg:      #050505;
-  --s1:      #0a0a0a;
-  --s2:      #111111;
-  --s3:      #181818;
-  --b0:      #1c1c1c;
-  --b1:      #2a2a2a;
-  --b2:      #3a3a3a;
-  --t0:      #fcfcfc;
-  --t1:      #a0a0a0;
-  --t2:      #666;
-  --t3:      #333;
-  --accent:  #fff; 
-  --f:       'DM Mono', monospace;
-  --ease:    cubic-bezier(0.16, 1, 0.3, 1);
+  /* Dark theme */
+  --bg:     #050505;
+  --s1:     #0a0a0a;
+  --s2:     #111111;
+  --s3:     #181818;
+  --b0:     #1c1c1c;
+  --b1:     #2a2a2a;
+  --b2:     #3a3a3a;
+  --t0:     #fcfcfc;
+  --t1:     #a0a0a0;
+  --t2:     #666;
+  --t3:     #333;
+  --accent: #fff;
+  --f:      'DM Mono', monospace;
+  --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+  --radius: 3px;
+  /* Derived / semantic */
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--b2);
 }
 
 [data-theme="light"] {
-  /* OFFSET LIGHT THEME (Warm/Creamy) */
-  --bg:      #f2f0eb; 
-  --s1:      #fbfaf7;
-  --s2:      #f7f5f0;
-  --s3:      #f0ede6;
-  --b0:      #ddd8cc;
-  --b1:      #ccc7bc;
-  --b2:      #bbb4a7;
-  --t0:      #1a1a1a;
-  --t1:      #4a4a4a;
-  --t2:      #6e6e6e;
-  --t3:      #a09e98;
-  --accent:  #000;
+  --bg:     #f2f0eb;
+  --s1:     #fbfaf7;
+  --s2:     #f7f5f0;
+  --s3:     #f0ede6;
+  --b0:     #ddd8cc;
+  --b1:     #ccc7bc;
+  --b2:     #bbb4a7;
+  --t0:     #1a1a1a;
+  --t1:     #4a4a4a;
+  --t2:     #6e6e6e;
+  --t3:     #a09e98;
+  --accent: #000;
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--b2);
 }
 
-html, body {
+html {
+  scroll-behavior: smooth;
+  /* Safe area for notched phones */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+body {
   background: var(--bg);
   color: var(--t0);
   font-family: var(--f);
@@ -59,26 +83,50 @@ html, body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Selection */
 ::selection { background: rgba(128,128,128,0.2); color: var(--t0); }
+
+/* Scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--b1); border-radius: 10px; }
 
+/* Focus visible */
+:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius); }
+:focus:not(:focus-visible) { outline: none; }
+
+
 /* ─────────────────────────────────────────
-   TOP BAR
+   TOPBAR
 ───────────────────────────────────────── */
 .topbar {
   position: sticky;
   top: 0;
   z-index: 100;
   background: var(--bg);
-  opacity: 0.95;
+  /* Slight blur for depth when scrolled */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--b0);
   display: flex;
   align-items: center;
   height: 52px;
   padding: 0 28px;
   gap: 24px;
+  /* On scroll, topbar gets a subtle shadow (JS adds .scrolled) */
+  transition: box-shadow 0.2s ease;
+}
+.topbar.scrolled {
+  box-shadow: 0 1px 16px rgba(0,0,0,0.4);
 }
 
 .topbar-brand {
@@ -90,9 +138,28 @@ html, body {
   flex-shrink: 0;
   transition: color .2s;
   cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--f);
+  padding: 0;
+  line-height: 1;
 }
 .topbar-brand:hover { color: var(--t0); }
-.topbar-brand span { color: var(--t3); }
+.topbar-brand span  { color: var(--t3); }
+
+/* Word-mark badge */
+.topbar-badge {
+  font-size: 8px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--t3);
+  border: 1px solid var(--b0);
+  padding: 2px 7px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  display: none; /* visible on wider viewports via media query */
+}
+@media (min-width: 640px) { .topbar-badge { display: inline; } }
 
 .topbar-search {
   flex: 1;
@@ -104,31 +171,31 @@ html, body {
   width: 100%;
   background: var(--s1);
   border: 1px solid var(--b0);
-  border-radius: 4px;
+  border-radius: var(--radius);
   color: var(--t0);
   font-family: var(--f);
   font-size: 12px;
   padding: 7px 0 7px 32px;
   outline: none;
-  transition: all .2s;
+  transition: border-color .2s, background .2s, box-shadow .2s;
   letter-spacing: .02em;
 }
-
 .topbar-search input::placeholder { color: var(--t3); }
-.topbar-search input:focus { 
-  border-color: var(--b2); 
+.topbar-search input:focus {
+  border-color: var(--b2);
   background: var(--s2);
   box-shadow: 0 0 0 1px var(--b2);
 }
 
-.search-slash {
+.search-icon {
   position: absolute;
-  left: 12px;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 12px;
   color: var(--t3);
   pointer-events: none;
+  user-select: none;
 }
 
 .topbar-right {
@@ -148,11 +215,11 @@ html, body {
   letter-spacing: .08em;
   padding: 4px 10px;
   cursor: pointer;
-  transition: all .15s;
+  transition: border-color .15s, color .15s, background .15s;
   text-transform: lowercase;
   border-radius: 2px;
+  line-height: 1.4;
 }
-
 .sort-pill:hover { border-color: var(--b1); color: var(--t1); }
 .sort-pill.on {
   background: var(--t0);
@@ -169,29 +236,31 @@ html, body {
   padding: 4px 10px;
   cursor: pointer;
   border-radius: 2px;
-  transition: all .2s;
+  transition: border-color .2s, color .2s;
+  line-height: 1.4;
 }
 .theme-toggle:hover { border-color: var(--b1); color: var(--t1); }
 
 .status-pip {
-  width: 6px; height: 6px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--b1);
-  margin-left: 12px;
+  margin-left: 4px;
   transition: background .4s, box-shadow .4s;
   flex-shrink: 0;
+  /* Accessible: screen-reader label */
+  role: img;
 }
 .status-pip.spin { animation: pip 1s ease-in-out infinite; }
-.status-pip.live { 
-    background: #4caf50; 
-    box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
-}
-.status-pip.dead { 
-    background: #f44336; 
-    box-shadow: 0 0 8px rgba(244, 67, 54, 0.4);
+.status-pip.live { background: #4caf50; box-shadow: 0 0 8px rgba(76,175,80,.4); }
+.status-pip.dead { background: #f44336; box-shadow: 0 0 8px rgba(244,67,54,.4); }
+
+@keyframes pip {
+  0%, 100% { opacity: .3; }
+  50%       { opacity: 1; }
 }
 
-@keyframes pip { 0%,100%{opacity:.3} 50%{opacity:1} }
 
 /* ─────────────────────────────────────────
    HERO
@@ -201,7 +270,6 @@ html, body {
   border-bottom: 1px solid var(--b0);
   max-width: 1000px;
   margin: 0 auto;
-  text-align: left;
 }
 
 .hero-kicker {
@@ -221,7 +289,6 @@ html, body {
   color: var(--t0);
   max-width: 800px;
 }
-
 .hero-h1 .muted { color: var(--t3); }
 
 .hero-stats {
@@ -240,12 +307,12 @@ html, body {
   display: inline-flex;
   align-items: center;
 }
-
 .hstat:last-child { border-right: none; }
 .hstat b { color: var(--t1); font-weight: 500; margin-right: 4px; }
 
+
 /* ─────────────────────────────────────────
-   MAIN LAYOUT & VIEWS
+   LAYOUT & VIEWS
 ───────────────────────────────────────── */
 .wrap {
   max-width: 1000px;
@@ -253,31 +320,28 @@ html, body {
   padding: 48px 28px 100px;
 }
 
-.view {
-  display: none;
+.view { display: none; }
+.view.active {
+  display: block;
   animation: fadeIn .3s var(--ease) forwards;
 }
-.view.active { display: block; }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
+/* Section header row */
 .sec {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-bottom: 24px;
 }
-
-.sec-name {
-  font-size: 9px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--t3);
-  white-space: nowrap;
-}
-
+.sec-name { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--t3); white-space: nowrap; }
 .sec-rule { flex: 1; height: 1px; background: var(--b0); }
-.sec-n { font-size: 9px; color: var(--t3); white-space: nowrap; }
+.sec-n    { font-size: 9px; color: var(--t3); white-space: nowrap; }
+
 
 /* ─────────────────────────────────────────
    RECENTLY VISITED
@@ -288,7 +352,6 @@ html, body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border: 1px solid var(--b0);
-  gap: 0;
 }
 
 .r-card {
@@ -297,66 +360,39 @@ html, body {
   text-decoration: none;
   display: block;
   border-right: 1px solid var(--b0);
-  transition: all .2s var(--ease);
+  transition: background .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
   overflow: hidden;
   position: relative;
   cursor: pointer;
+  color: inherit;
+}
+.r-card:last-child  { border-right: none; }
+.r-card:hover {
+  background: var(--s2);
+  transform: translateY(-2px);
+  z-index: 1;
+  box-shadow: 0 -1px 0 var(--b1), 0 1px 0 var(--b1);
 }
 
-.r-card:last-child { border-right: none; }
-.r-card:hover { background: var(--s2); transform: translateY(-2px); z-index: 1; box-shadow: 0 -1px 0 var(--b1), 0 1px 0 var(--b1); }
-
-.r-badge {
-  font-size: 8px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--t3);
-  margin-bottom: 8px;
-  display: block;
-}
-
-.r-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--t0);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 20px;
-}
-
-.r-desc {
-  font-size: 11px;
-  color: var(--t2);
-  margin-top: 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.r-arrow {
-  position: absolute;
-  top: 16px; right: 16px;
-  font-size: 10px;
-  color: var(--t3);
-  transition: all .2s;
-}
+.r-badge { font-size: 8px; letter-spacing: .18em; text-transform: uppercase; color: var(--t3); margin-bottom: 8px; display: block; }
+.r-name  { font-size: 13px; font-weight: 500; color: var(--t0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 20px; }
+.r-desc  { font-size: 11px; color: var(--t2); margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.r-arrow { position: absolute; top: 16px; right: 16px; font-size: 10px; color: var(--t3); transition: color .2s, transform .2s; }
 .r-card:hover .r-arrow { color: var(--t1); transform: translate(2px, -2px); }
 
+
 /* ─────────────────────────────────────────
-   CARDS GRID
+   CARD GRID
 ───────────────────────────────────────── */
 #cardGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   border: 1px solid var(--b0);
-  gap: 0;
 }
 
 .card-wrap {
   border-right: 1px solid var(--b0);
   border-bottom: 1px solid var(--b0);
-  transition: all .2s var(--ease);
 }
 
 .card {
@@ -367,101 +403,59 @@ html, body {
   flex-direction: column;
   min-height: 130px;
   position: relative;
-  transition: all .2s var(--ease);
+  transition: background .2s var(--ease), box-shadow .2s var(--ease);
   opacity: 0;
   transform: translateY(10px);
   animation: fadeUp .4s var(--ease) forwards;
   cursor: pointer;
+  color: inherit;
 }
-
-.card:hover { 
-  background: var(--s2); 
+.card:hover {
+  background: var(--s2);
   box-shadow: inset 0 0 0 1px var(--b1);
 }
 
-@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
-
-.c-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.c-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--t0);
-  letter-spacing: -.01em;
-  line-height: 1.3;
-  flex: 1;
-}
-
+.c-top  { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.c-name { font-size: 14px; font-weight: 500; color: var(--t0); letter-spacing: -.01em; line-height: 1.3; flex: 1; }
 .c-stars {
-  font-size: 10px;
-  color: var(--t3);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-  padding-top: 3px;
+  font-size: 10px; color: var(--t3); display: flex; align-items: center;
+  gap: 4px; flex-shrink: 0; padding-top: 3px;
 }
 
-.c-desc {
-  font-size: 12px;
-  font-weight: 300;
-  color: var(--t2);
-  line-height: 1.6;
-  flex: 1;
-  font-style: italic;
-}
+.c-desc { font-size: 12px; font-weight: 300; color: var(--t2); line-height: 1.6; flex: 1; font-style: italic; }
 
-.c-foot {
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.c-time {
-  font-size: 9px;
-  color: var(--t3);
-  letter-spacing: .06em;
-}
-
-.c-tag {
-  font-size: 8px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--t3);
-  border: 1px solid var(--b0);
-  padding: 2px 8px;
-  border-radius: 2px;
-  transition: all .2s;
+.c-foot { margin-top: 20px; display: flex; align-items: center; justify-content: space-between; }
+.c-time { font-size: 9px; color: var(--t3); letter-spacing: .06em; }
+.c-tag  {
+  font-size: 8px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--t3); border: 1px solid var(--b0); padding: 2px 8px;
+  border-radius: 2px; transition: border-color .2s, color .2s;
 }
 .card:hover .c-tag { border-color: var(--b1); color: var(--t1); }
 
 .c-arrow {
-  position: absolute;
-  top: 20px; right: 16px;
-  font-size: 12px;
-  color: var(--t2);
-  opacity: 0;
-  transform: translate(-4px, 4px);
-  transition: all .2s var(--ease);
+  position: absolute; top: 20px; right: 16px; font-size: 12px;
+  color: var(--t2); opacity: 0; transform: translate(-4px, 4px);
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
 }
 .card:hover .c-arrow { opacity: 1; transform: translate(0,0); }
 
+
 /* ─────────────────────────────────────────
-   DETAIL VIEW (Branches & Commits)
+   DETAIL VIEW
 ───────────────────────────────────────── */
 .detail-header {
   display: flex;
   align-items: center;
   gap: 20px;
   margin-bottom: 40px;
+  flex-wrap: wrap;
 }
+
 .back-btn {
   background: none;
   border: 1px solid var(--b0);
@@ -470,8 +464,8 @@ html, body {
   font-size: 10px;
   padding: 6px 12px;
   cursor: pointer;
-  transition: all .2s;
-  border-radius: 2px;
+  transition: color .2s, border-color .2s;
+  border-radius: var(--radius);
 }
 .back-btn:hover { color: var(--t0); border-color: var(--b1); }
 
@@ -493,6 +487,8 @@ html, body {
   border: 1px solid var(--b0);
   display: flex;
   flex-direction: column;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .branch-item {
@@ -501,17 +497,13 @@ html, body {
   color: var(--t2);
   cursor: pointer;
   border-bottom: 1px solid var(--b0);
-  transition: all .2s;
+  transition: color .2s, background .2s;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 .branch-item:last-child { border-bottom: none; }
-.branch-item.on {
-  background: var(--s2);
-  color: var(--t0);
-  border-left: 2px solid var(--t0);
-}
+.branch-item.on { background: var(--s2); color: var(--t0); border-left: 2px solid var(--t0); }
 .branch-item:hover:not(.on) { color: var(--t1); background: var(--s1); }
 
 .timeline {
@@ -530,7 +522,7 @@ html, body {
   position: relative;
   margin-bottom: 32px;
   cursor: pointer;
-  transition: all .2s;
+  transition: transform .2s;
 }
 .commit-node:hover { transform: translateX(4px); }
 
@@ -541,9 +533,9 @@ html, body {
   border-radius: 50%;
   background: var(--b1);
   border: 2px solid var(--bg);
-  transition: all .2s;
+  transition: background .2s, box-shadow .2s;
 }
-.commit-node:hover .commit-dot { background: var(--t0); box-shadow: 0 0 8px var(--t0); }
+.commit-node:hover .commit-dot { background: var(--t0); box-shadow: 0 0 8px rgba(252,252,252,.3); }
 
 .commit-meta {
   display: flex;
@@ -554,30 +546,29 @@ html, body {
   letter-spacing: .05em;
 }
 
-.commit-msg {
-  font-size: 13px;
-  color: var(--t1);
-  line-height: 1.4;
-}
+.commit-msg { font-size: 13px; color: var(--t1); line-height: 1.4; }
 
 .commit-details {
   margin-top: 12px;
   padding: 12px;
   background: var(--s1);
   border: 1px solid var(--b0);
-  border-radius: 4px;
+  border-radius: var(--radius);
   font-size: 11px;
   color: var(--t2);
   display: none;
   white-space: pre-wrap;
+  line-height: 1.7;
 }
 .commit-node.open .commit-details { display: block; }
+.commit-details a { color: var(--t0); text-decoration: underline; margin-top: 8px; display: block; }
+
 
 /* ─────────────────────────────────────────
-   SORTS & FILTERS
+   STATES (empty / loading)
 ───────────────────────────────────────── */
 .state {
-  grid-column: 1/-1;
+  grid-column: 1 / -1;
   padding: 80px 0;
   text-align: center;
   font-size: 12px;
@@ -587,7 +578,7 @@ html, body {
 
 .loading-anim::after {
   content: '';
-  animation: ldots 1.2s steps(4,end) infinite;
+  animation: ldots 1.2s steps(4, end) infinite;
 }
 @keyframes ldots {
   0%  { content: ''; }
@@ -596,6 +587,10 @@ html, body {
   75% { content: '...'; }
 }
 
+
+/* ─────────────────────────────────────────
+   TAG / FILTER BAR
+───────────────────────────────────────── */
 .tag-bar {
   display: flex;
   flex-wrap: wrap;
@@ -613,17 +608,18 @@ html, body {
   text-transform: uppercase;
   padding: 5px 12px;
   cursor: pointer;
-  transition: all .15s var(--ease);
+  transition: border-color .15s var(--ease), color .15s var(--ease), background .15s var(--ease), box-shadow .15s var(--ease);
   border-radius: 2px;
+  line-height: 1.4;
 }
-
 .ftag:hover { border-color: var(--b1); color: var(--t1); }
-.ftag.on { 
-  background: var(--s2); 
-  border-color: var(--b1); 
+.ftag.on {
+  background: var(--s2);
+  border-color: var(--b1);
   color: var(--t0);
   box-shadow: 0 0 0 1px var(--b1);
 }
+
 
 /* ─────────────────────────────────────────
    FOOTER
@@ -637,7 +633,10 @@ html, body {
   font-size: 9px;
   color: var(--t3);
   letter-spacing: .08em;
+  flex-wrap: wrap;
+  gap: 8px;
 }
+
 
 /* ─────────────────────────────────────────
    PWA INSTALL POPUP
@@ -648,118 +647,205 @@ html, body {
   right: 24px;
   width: 320px;
   background: var(--s1);
-  border: 1px solid var(--b0);
+  border: 1px solid var(--b1);
   padding: 20px;
-  z-index: 1000;
+  z-index: 200;
   display: none;
   flex-direction: column;
   gap: 16px;
-  border-radius: 4px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
   animation: slideUp .4s var(--ease) forwards;
 }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-.pwa-content { display: flex; align-items: center; gap: 12px; }
-.pwa-icon { width: 32px; height: 32px; border-radius: 4px; background: var(--b1); }
-.pwa-text { font-size: 11px; color: var(--t1); line-height: 1.4; }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pwa-content { display: flex; align-items: center; gap: 14px; }
+
+.pwa-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--b1); flex-shrink: 0; overflow: hidden;
+}
+.pwa-icon img { width: 100%; height: 100%; }
+
+.pwa-title  { font-size: 12px; font-weight: 500; color: var(--t0); margin-bottom: 3px; }
+.pwa-sub    { font-size: 11px; color: var(--t2); line-height: 1.4; }
 .pwa-actions { display: flex; justify-content: flex-end; gap: 12px; }
 
 .pwa-btn {
   font-family: var(--f);
-  font-size: 9px;
-  padding: 6px 12px;
+  font-size: 10px;
+  padding: 7px 14px;
   cursor: pointer;
   border-radius: 2px;
-  transition: all .2s;
+  transition: opacity .2s, background .2s, border-color .2s;
+  letter-spacing: .04em;
+  line-height: 1;
 }
-.btn-cancel { background: none; border: 1px solid var(--b0); color: var(--t2); }
+.btn-cancel  { background: none; border: 1px solid var(--b1); color: var(--t2); }
+.btn-cancel:hover { border-color: var(--b2); color: var(--t1); }
 .btn-install { background: var(--t0); color: var(--bg); border: none; font-weight: 500; }
-.btn-install:hover { opacity: 0.9; }
+.btn-install:hover { opacity: .85; }
+
+
+/* ─────────────────────────────────────────
+   MODE SWITCHER
+───────────────────────────────────────── */
+.mode-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+.mode-label {
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--t3);
+}
+
 
 /* ─────────────────────────────────────────
    RESPONSIVE
 ───────────────────────────────────────── */
 @media (max-width: 768px) {
-  .topbar { padding: 0 16px; gap: 16px; }
-  .hero   { padding: 60px 16px 40px; }
-  .wrap   { padding: 32px 16px 60px; }
-  .recent-row { grid-template-columns: 1fr; }
-  .recent-row .r-card:nth-child(n) { border-right: none; border-bottom: 1px solid var(--b0); }
-  #cardGrid { grid-template-columns: 1fr; }
+  .topbar  { padding: 0 16px; gap: 12px; }
+  .hero    { padding: 52px 16px 36px; }
+  .wrap    { padding: 28px 16px 60px; }
   .hero-h1 { font-size: 28px; }
-  #pwaPopup { width: calc(100% - 48px); left: 24px; right: 24px; }
+
+  .recent-row {
+    grid-template-columns: 1fr;
+  }
+  .r-card {
+    border-right: none;
+    border-bottom: 1px solid var(--b0);
+  }
+  .r-card:last-child { border-bottom: none; }
+
+  #cardGrid { grid-template-columns: 1fr; }
+
+  .branch-container { grid-template-columns: 1fr; }
+  .branch-list { margin-bottom: 24px; }
+  .timeline { padding-left: 24px; }
+
+  .topbar-right .sort-pill:not([data-sort]) { display: none; }
+
+  #pwaPopup { width: calc(100% - 32px); left: 16px; right: 16px; bottom: 16px; }
 }
-</style>
+
+@media (max-width: 480px) {
+  .hero-stats { gap: 8px 0; }
+  .hstat { font-size: 10px; padding-right: 14px; margin-right: 14px; }
+  .topbar-right .sort-pill { display: none; }
+  .topbar-right .sort-pill[data-sort] { display: inline-block; }
+  .topbar-right > *:not(.theme-toggle):not(.status-pip):not([data-sort="name"]) {
+    display: none;
+  }
+}
+  </style>
 </head>
 <body data-theme="dark">
 
-<!-- TOP BAR -->
-<header class="topbar">
-  <span class="topbar-brand" onclick="goHome()">itsnotalwin<span>.github.io</span></span>
+<!-- ═══════════════════════════════════════
+     TOP BAR
+════════════════════════════════════════ -->
+<header class="topbar" role="banner">
+  <button class="topbar-brand" onclick="goHome()" aria-label="Go to home">
+    launchpad<span>.io</span>
+  </button>
+  <span class="topbar-badge" aria-hidden="true">itsnotalwin</span>
 
-  <div class="topbar-search">
-    <span class="search-slash">/</span>
-    <input id="searchInput" type="text" placeholder="filter repositories…" autocomplete="off" spellcheck="false">
+  <div class="topbar-search" role="search">
+    <span class="search-icon" aria-hidden="true">/</span>
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="filter repositories…"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="Filter repositories"
+    >
   </div>
 
   <div class="topbar-right">
-    <button class="sort-pill on" data-sort="name">a–z</button>
-    <button class="sort-pill" data-sort="recent">recent</button>
-    <button class="sort-pill" data-sort="stars">★</button>
-    <button class="theme-toggle" id="themeToggle">light mode</button>
-    <span class="status-pip spin" id="pip"></span>
+    <button class="sort-pill on" data-sort="name"   aria-pressed="true">a–z</button>
+    <button class="sort-pill"    data-sort="recent" aria-pressed="false">recent</button>
+    <button class="sort-pill"    data-sort="stars"  aria-pressed="false">★</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle colour theme">light</button>
+    <span
+      class="status-pip spin"
+      id="pip"
+      aria-live="polite"
+      aria-label="Loading repositories"
+    ></span>
   </div>
 </header>
 
-<!-- LAUNCHER VIEW -->
-<div id="viewLauncher" class="view active">
-  <div class="hero">
+
+<!-- ═══════════════════════════════════════
+     LAUNCHER VIEW
+════════════════════════════════════════ -->
+<main id="viewLauncher" class="view active" aria-label="Project launcher">
+
+  <div class="hero" aria-labelledby="heroTitle">
     <p class="hero-kicker">github pages launcher</p>
-    <h1 class="hero-h1">all sites<span class="muted">, one place.</span></h1>
-    <div class="hero-stats">
-      <span class="hstat" id="hs1"><b class="val">—</b> sites</span>
-      <span class="hstat" id="hs2"><b class="val">—</b> total stars</span>
+    <h1 class="hero-h1" id="heroTitle">all sites<span class="muted">, one place.</span></h1>
+    <div class="hero-stats" role="status" aria-live="polite">
+      <span class="hstat" id="hs1"><b class="val" aria-label="Site count">—</b> sites</span>
+      <span class="hstat" id="hs2"><b class="val" aria-label="Total stars">—</b> total stars</span>
       <span class="hstat" id="hs3">loading…</span>
     </div>
   </div>
 
   <div class="wrap">
-    <div class="sec" style="justify-content: center; margin-bottom: 32px;">
-      <div class="sec-name" style="margin-right: 12px;">Mode:</div>
-      <button class="sort-pill on" id="modeExplorer" onclick="setMode('explorer')">explorer</button>
-      <button class="sort-pill" id="modeLauncher" onclick="setMode('launcher')">launcher</button>
+
+    <!-- Mode switcher -->
+    <div class="mode-row" role="group" aria-label="View mode">
+      <span class="mode-label">mode</span>
+      <button class="sort-pill on" id="modeExplorer" onclick="setMode('explorer')" aria-pressed="true">explorer</button>
+      <button class="sort-pill"    id="modeLauncher" onclick="setMode('launcher')" aria-pressed="false">launcher</button>
     </div>
 
-    <section id="recentSection">
+    <!-- Recently visited -->
+    <section id="recentSection" aria-label="Recently visited">
       <div class="sec">
         <span class="sec-name">recently visited</span>
-        <div class="sec-rule"></div>
+        <div class="sec-rule" role="separator"></div>
       </div>
       <div class="recent-row" id="recentRow"></div>
     </section>
 
-    <div class="tag-bar" id="tagBar"></div>
+    <!-- Tag filters -->
+    <div class="tag-bar" id="tagBar" role="group" aria-label="Filter by tag"></div>
 
+    <!-- All projects -->
     <div class="sec">
       <span class="sec-name">all projects</span>
-      <div class="sec-rule"></div>
-      <span class="sec-n" id="secCount"></span>
+      <div class="sec-rule" role="separator"></div>
+      <span class="sec-n" id="secCount" aria-live="polite"></span>
     </div>
 
-    <div id="cardGrid">
-      <div class="state loading-anim">fetching repositories</div>
+    <div id="cardGrid" role="list" aria-label="Repository cards">
+      <div class="state loading-anim" aria-live="polite">fetching repositories</div>
     </div>
 
-    <div class="foot">
-      <span>itsnotalwin — github pages</span>
+    <footer class="foot" role="contentinfo">
+      <span>launchpad — itsnotalwin</span>
       <span id="footR"></span>
-    </div>
+    </footer>
   </div>
-</div>
+</main>
 
-<!-- DETAIL VIEW -->
-<div id="viewDetail" class="view">
+
+<!-- ═══════════════════════════════════════
+     DETAIL VIEW
+════════════════════════════════════════ -->
+<div id="viewDetail" class="view" aria-label="Repository detail">
   <div class="wrap">
     <div class="detail-header">
       <button class="back-btn" onclick="goHome()">← back</button>
@@ -767,139 +853,167 @@ html, body {
     </div>
 
     <div class="branch-container">
-      <div class="branch-list" id="branchList">
-        <div class="state">loading branches...</div>
+      <div class="branch-list" id="branchList" role="list" aria-label="Branches">
+        <div class="state">loading branches…</div>
       </div>
-      <div class="timeline" id="commitTimeline">
+      <div class="timeline" id="commitTimeline" aria-live="polite">
         <div class="state">select a branch to see history</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PWA POPUP -->
-<div id="pwaPopup">
+
+<!-- ═══════════════════════════════════════
+     PWA INSTALL POPUP
+════════════════════════════════════════ -->
+<div id="pwaPopup" role="dialog" aria-modal="true" aria-label="Install Launchpad">
   <div class="pwa-content">
-    <div class="pwa-icon"></div>
-    <div class="pwa-text">
-      <strong>Install App</strong><br>
-      Add this launcher to your desktop for instant access.
+    <div class="pwa-icon">
+      <img src="icon-192.svg" alt="" width="36" height="36">
+    </div>
+    <div>
+      <div class="pwa-title">Install Launchpad</div>
+      <div class="pwa-sub">Add to your home screen for instant access.</div>
     </div>
   </div>
   <div class="pwa-actions">
-    <button class="pwa-btn btn-cancel" onclick="closePWA()">maybe later</button>
+    <button class="pwa-btn btn-cancel"  onclick="closePWA()">maybe later</button>
     <button class="pwa-btn btn-install" id="installBtn">install now</button>
   </div>
 </div>
 
+
+<!-- ═══════════════════════════════════════
+     SCRIPT
+════════════════════════════════════════ -->
 <script>
-const USER = 'itsnotalwin';
+'use strict';
+
+/* ── Constants ─────────────────────────────── */
+const USER      = 'itsnotalwin';
 const LS_RECENT = 'alw3_recent';
 const LS_SORT   = 'alw3_sort';
 const LS_TAG    = 'alw3_tag';
 const LS_THEME  = 'alw3_theme';
 const LS_MODE   = 'alw3_mode';
 
+/* ── State ──────────────────────────────────── */
 let currentMode = localStorage.getItem(LS_MODE) || 'explorer';
+let sortMode    = localStorage.getItem(LS_SORT)  || 'name';
+let activeTag   = localStorage.getItem(LS_TAG)   || 'all';
+let allRepos    = [];
 
-// ── PWA Logic ──────────────────────────────────────────────────────────────
-let deferredPrompt;
+/* ── Scroll shadow on topbar ────────────────── */
+window.addEventListener('scroll', () => {
+  document.querySelector('.topbar').classList.toggle('scrolled', window.scrollY > 4);
+}, { passive: true });
 
-window.addEventListener('beforeinstallprompt', (e) => {
+/* ── PWA ─────────────────────────────────────── */
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
-  document.getElementById('pwaPopup').style.display = 'flex';
+  const popup = document.getElementById('pwaPopup');
+  popup.style.display = 'flex';
+  popup.removeAttribute('hidden');
 });
 
 document.getElementById('installBtn').addEventListener('click', async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('User accepted install');
-    }
-    deferredPrompt = null;
-    closePWA();
-  }
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  closePWA();
 });
 
 function closePWA() {
-  document.getElementById('pwaPopup').style.display = 'none';
+  const popup = document.getElementById('pwaPopup');
+  popup.style.display = 'none';
 }
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then(reg => {
-      console.log('SW registered');
-    }).catch(err => console.log('SW registration failed', err));
+    navigator.serviceWorker.register('/sw.js').catch(() => {/* silently ignore in dev */});
   });
 }
 
-// ── Theme Logic ──────────────────────────────────────────────────────────
+/* ── Theme ───────────────────────────────────── */
 function initTheme() {
   const saved = localStorage.getItem(LS_THEME) || 'dark';
-  document.body.setAttribute('data-theme', saved);
-  document.getElementById('themeToggle').textContent = saved === 'dark' ? 'light mode' : 'dark mode';
+  applyTheme(saved);
+}
+
+function applyTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  document.getElementById('themeToggle').textContent = theme === 'dark' ? 'light' : 'dark';
+  // Update meta theme-color for browser chrome
+  document.getElementById('themeColorMeta').setAttribute(
+    'content',
+    theme === 'dark' ? '#050505' : '#f2f0eb'
+  );
+  localStorage.setItem(LS_THEME, theme);
 }
 
 document.getElementById('themeToggle').addEventListener('click', () => {
-  const current = document.body.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  document.body.setAttribute('data-theme', next);
-  localStorage.setItem(LS_THEME, next);
-  document.getElementById('themeToggle').textContent = next === 'dark' ? 'light mode' : 'dark mode';
+  applyTheme(document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 });
 
-// ── Mode Logic ──────────────────────────────────────────────────────────
+/* ── Mode ────────────────────────────────────── */
 function setMode(mode) {
   currentMode = mode;
   localStorage.setItem(LS_MODE, mode);
-  
-  document.getElementById('modeExplorer').classList.toggle('on', mode === 'explorer');
-  document.getElementById('modeLauncher').classList.toggle('on', mode === 'launcher');
-  
+  const isExplorer = mode === 'explorer';
+  const exBtn = document.getElementById('modeExplorer');
+  const laBtn = document.getElementById('modeLauncher');
+  exBtn.classList.toggle('on', isExplorer);
+  laBtn.classList.toggle('on', !isExplorer);
+  exBtn.setAttribute('aria-pressed', String(isExplorer));
+  laBtn.setAttribute('aria-pressed', String(!isExplorer));
   renderCards();
 }
 
-// ── Navigation ──────────────────────────────────────────────────────────
+/* ── Navigation ──────────────────────────────── */
 function switchView(viewId) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(viewId).classList.add('active');
-  window.scrollTo(0,0);
+  const next = document.getElementById(viewId);
+  next.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Move focus for accessibility
+  const focusTarget = next.querySelector('button, [href], input, h1');
+  if (focusTarget) focusTarget.focus({ preventScroll: true });
 }
 
-function goHome() {
-  switchView('viewLauncher');
-}
+function goHome() { switchView('viewLauncher'); }
 
-// ── Descriptions ──────────────────────────────────────────────────────────
+/* ── Description rules ───────────────────────── */
 const DESC_RULES = [
-  [/portfolio|personal site|\.io$/,  'personal website & portfolio'],
-  [/blog|journal|writing|posts/,     'writing & published thoughts'],
-  [/game|puzzle|quiz|play|arcade/,   'browser-based game'],
-  [/todo|task|list|note/,            'task & note management tool'],
-  [/chat|message|talk/,              'messaging interface'],
-  [/music|audio|sound|player/,       'audio & music project'],
-  [/weather|forecast/,               'weather dashboard'],
-  [/map|geo|location/,               'map & location tool'],
-  [/calc|math|convert/,              'calculator or converter'],
-  [/timer|clock|stopwatch|pomodoro/, 'time tracking utility'],
-  [/draw|paint|canvas|art|sketch/,   'drawing or creative tool'],
-  [/dashboard|stats|analytic/,       'data & analytics dashboard'],
-  [/tool|util|helper|generator/,     'developer utility'],
-  [/doc|wiki|guide/,                 'documentation & reference'],
-  [/demo|example|sample|template/,   'demo or starter template'],
-  [/css|style|theme|design/,         'CSS & design experiments'],
-  [/react|vue|svelte|next/,          'frontend web application'],
-  [/extension|chrome|firefox/,       'browser extension'],
-  [/api|fetch|data/,                 'data fetching utility'],
+  [/portfolio|personal\s?site|\.io$/,  'personal website & portfolio'],
+  [/blog|journal|writing|posts/,        'writing & published thoughts'],
+  [/game|puzzle|quiz|play|arcade/,      'browser-based game'],
+  [/todo|task|list|note/,               'task & note management tool'],
+  [/chat|message|talk/,                 'messaging interface'],
+  [/music|audio|sound|player/,          'audio & music project'],
+  [/weather|forecast/,                  'weather dashboard'],
+  [/map|geo|location/,                  'map & location tool'],
+  [/calc|math|convert/,                 'calculator or converter'],
+  [/timer|clock|stopwatch|pomodoro/,    'time tracking utility'],
+  [/draw|paint|canvas|art|sketch/,      'drawing or creative tool'],
+  [/dashboard|stats|analytic/,          'data & analytics dashboard'],
+  [/tool|util|helper|generator/,        'developer utility'],
+  [/doc|wiki|guide/,                    'documentation & reference'],
+  [/demo|example|sample|template/,      'demo or starter template'],
+  [/css|style|theme|design/,            'CSS & design experiments'],
+  [/react|vue|svelte|next/,             'frontend web application'],
+  [/extension|chrome|firefox/,          'browser extension'],
+  [/api|fetch|data/,                    'data fetching utility'],
 ];
 
 function describe(name) {
-  const n = name.toLowerCase().replace(/[-_.]/g,' ');
+  const n = name.toLowerCase().replace(/[-_.]/g, ' ');
   for (const [re, d] of DESC_RULES) if (re.test(n)) return d;
-  const w = name.replace(/[-_]/g,' ').trim();
-  return w + ' — web project';
+  return name.replace(/[-_]/g, ' ').trim() + ' — web project';
 }
 
 function getTag(name) {
@@ -913,28 +1027,34 @@ function getTag(name) {
     ['demo',      /demo|example|sample|template/],
     ['extension', /extension|chrome|firefox|plugin/],
   ];
-  const n = name.toLowerCase().replace(/[-_.]/g,' ');
+  const n = name.toLowerCase().replace(/[-_.]/g, ' ');
   for (const [t, re] of TAG_RULES) if (re.test(n)) return t;
   return 'misc';
 }
 
+/* Relative time */
 function rel(iso) {
   if (!iso) return '';
   const d = Math.floor((Date.now() - new Date(iso)) / 86400000);
   if (d === 0) return 'today';
   if (d === 1) return 'yesterday';
   if (d < 7)   return d + 'd ago';
-  if (d < 30)  return Math.floor(d/7) + 'w ago';
-  if (d < 365) return Math.floor(d/30) + 'mo ago';
-  return Math.floor(d/365) + 'y ago';
+  if (d < 30)  return Math.floor(d / 7) + 'w ago';
+  if (d < 365) return Math.floor(d / 30) + 'mo ago';
+  return Math.floor(d / 365) + 'y ago';
 }
 
-// ── Recent ────────────────────────────────────────────────────────────────
-const getRecent = () => { try { return JSON.parse(localStorage.getItem(LS_RECENT)||'[]'); } catch { return []; } };
+/* Escape for inline HTML attributes */
+function esc(s) { return String(s).replace(/"/g, '&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ── Recent ──────────────────────────────────── */
+function getRecent() {
+  try { return JSON.parse(localStorage.getItem(LS_RECENT) || '[]'); } catch { return []; }
+}
 function addRecent(r) {
-  let list = getRecent().filter(x => x.name !== r.name);
+  const list = getRecent().filter(x => x.name !== r.name);
   list.unshift(r);
-  try { localStorage.setItem(LS_RECENT, JSON.stringify(list.slice(0,3))); } catch {}
+  try { localStorage.setItem(LS_RECENT, JSON.stringify(list.slice(0, 3))); } catch {}
 }
 function renderRecent() {
   const list = getRecent();
@@ -943,27 +1063,28 @@ function renderRecent() {
   if (!list.length) { sec.style.display = 'none'; return; }
   sec.style.display = '';
   row.innerHTML = list.map(r => `
-    <a class="r-card" href="#" 
-       onclick="event.preventDefault(); openRepo('${r.name}', '${r.url}', '${(r.desc||'').replace(/"/g,'&quot;')}')"
-       data-name="${r.name}" data-url="${r.url}" data-desc="${(r.desc||'').replace(/"/g,'&quot;')}">
-      <span class="r-badge">↩ visited</span>
-      <div class="r-name">${r.name}</div>
-      <div class="r-desc">${r.desc||''}</div>
-      <span class="r-arrow">↗</span>
+    <a class="r-card" href="${esc(r.url)}" rel="noopener noreferrer"
+       onclick="event.preventDefault(); openRepo('${esc(r.name)}', '${esc(r.url)}', '${esc(r.desc||'')}')"
+       role="listitem">
+      <span class="r-badge" aria-hidden="true">↩ visited</span>
+      <div class="r-name">${esc(r.name)}</div>
+      <div class="r-desc">${esc(r.desc || '')}</div>
+      <span class="r-arrow" aria-hidden="true">↗</span>
     </a>`).join('');
 }
 
-// ── Sort ──────────────────────────────────────────────────────────────────
-let sortMode  = localStorage.getItem(LS_SORT) || 'name';
-let activeTag = localStorage.getItem(LS_TAG)  || 'all';
-let allRepos  = [];
-
-document.querySelectorAll('.sort-pill').forEach(btn => {
+/* ── Sort ─────────────────────────────────────── */
+document.querySelectorAll('.sort-pill[data-sort]').forEach(btn => {
   btn.classList.toggle('on', btn.dataset.sort === sortMode);
+  btn.setAttribute('aria-pressed', String(btn.dataset.sort === sortMode));
   btn.addEventListener('click', () => {
     sortMode = btn.dataset.sort;
     try { localStorage.setItem(LS_SORT, sortMode); } catch {}
-    document.querySelectorAll('.sort-pill').forEach(b => b.classList.toggle('on', b.dataset.sort === sortMode));
+    document.querySelectorAll('.sort-pill[data-sort]').forEach(b => {
+      const on = b.dataset.sort === sortMode;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
     renderCards();
   });
 });
@@ -972,68 +1093,78 @@ document.getElementById('searchInput').addEventListener('input', renderCards);
 
 function sorted(repos) {
   const a = [...repos];
-  if (sortMode === 'name')   return a.sort((x,y) => x.name.localeCompare(y.name));
-  if (sortMode === 'recent') return a.sort((x,y) => new Date(y.pushed_at) - new Date(x.pushed_at));
-  if (sortMode === 'stars')  return a.sort((x,y) => y.stargazers_count - x.stargazers_count);
+  if (sortMode === 'name')   return a.sort((x, y) => x.name.localeCompare(y.name));
+  if (sortMode === 'recent') return a.sort((x, y) => new Date(y.pushed_at) - new Date(x.pushed_at));
+  if (sortMode === 'stars')  return a.sort((x, y) => y.stargazers_count - x.stargazers_count);
   return a;
 }
 
+/* ── Tag bar ─────────────────────────────────── */
 function buildTags() {
   const counts = {};
-  allRepos.forEach(r => { const t = getTag(r.name); counts[t] = (counts[t]||0) + 1; });
+  allRepos.forEach(r => { const t = getTag(r.name); counts[t] = (counts[t] || 0) + 1; });
   const bar = document.getElementById('tagBar');
   bar.innerHTML = '';
+
   const make = (id, label, count) => {
     const b = document.createElement('button');
     b.className = 'ftag' + (activeTag === id ? ' on' : '');
     b.dataset.tag = id;
-    b.textContent = label + (count !== undefined ? ` (${count})` : '');
+    b.textContent = count !== undefined ? `${label} (${count})` : label;
+    b.setAttribute('aria-pressed', String(activeTag === id));
     b.addEventListener('click', () => {
       activeTag = id;
       try { localStorage.setItem(LS_TAG, id); } catch {}
-      bar.querySelectorAll('.ftag').forEach(x => x.classList.toggle('on', x.dataset.tag === id));
+      bar.querySelectorAll('.ftag').forEach(x => {
+        const on = x.dataset.tag === id;
+        x.classList.toggle('on', on);
+        x.setAttribute('aria-pressed', String(on));
+      });
       renderCards();
     });
     bar.appendChild(b);
   };
+
   make('all', 'all', allRepos.length);
-  Object.entries(counts).sort((a,b)=>b[1]-a[1]).forEach(([id,n]) => make(id, id, n));
+  Object.entries(counts).sort((a, b) => b[1] - a[1]).forEach(([id, n]) => make(id, id, n));
 }
 
+/* ── Render cards ────────────────────────────── */
 function renderCards() {
-  const q = document.getElementById('searchInput').value.toLowerCase().trim();
-  let list = sorted(allRepos);
-  if (q) list = list.filter(r => r.name.toLowerCase().includes(q));
+  const q    = document.getElementById('searchInput').value.toLowerCase().trim();
+  let   list = sorted(allRepos);
+  if (q)                               list = list.filter(r => r.name.toLowerCase().includes(q));
   if (activeTag && activeTag !== 'all') list = list.filter(r => getTag(r.name) === activeTag);
 
   const grid = document.getElementById('cardGrid');
   document.getElementById('secCount').textContent = `${list.length} / ${allRepos.length}`;
-  document.getElementById('footR').textContent = `${list.length} project${list.length !== 1 ? 's' : ''}`;
+  document.getElementById('footR').textContent    = `${list.length} project${list.length !== 1 ? 's' : ''}`;
 
   if (!list.length) {
-    grid.innerHTML = `<div class="state">no results${q ? ` for "${q}"` : ''}</div>`;
+    grid.innerHTML = `<div class="state" role="status">no results${q ? ` for "${esc(q)}"` : ''}</div>`;
     return;
   }
 
   grid.innerHTML = list.map((repo, i) => {
-    const url  = `https://${USER}.github.io/${repo.name}/`;
-    const desc = describe(repo.name);
-    const tag  = getTag(repo.name);
+    const url   = `https://${USER}.github.io/${repo.name}/`;
+    const desc  = describe(repo.name);
+    const tag   = getTag(repo.name);
     const stars = repo.stargazers_count || 0;
     const delay = Math.min(i * 30, 600);
-    return `<div class="card-wrap">
+    return `<div class="card-wrap" role="listitem">
       <a class="card" style="animation-delay:${delay}ms"
-         onclick="handleCardClick(event, '${repo.name}', '${url}', '${desc.replace(/"/g,'&quot;')}')"
-         data-name="${repo.name}" data-url="${url}" data-desc="${desc.replace(/"/g,'&quot;')}">
-        <span class="c-arrow">↗</span>
+         href="${esc(url)}"
+         onclick="handleCardClick(event,'${esc(repo.name)}','${esc(url)}','${esc(desc)}')"
+         aria-label="${esc(repo.name)} — ${esc(desc)}">
+        <span class="c-arrow" aria-hidden="true">↗</span>
         <div class="c-top">
-          <div class="c-name">${repo.name}</div>
-          ${stars > 0 ? `<div class="c-stars">★ ${stars}</div>` : ''}
+          <div class="c-name">${esc(repo.name)}</div>
+          ${stars > 0 ? `<div class="c-stars" aria-label="${stars} stars">★ ${stars}</div>` : ''}
         </div>
-        <div class="c-desc">${desc}</div>
+        <div class="c-desc">${esc(desc)}</div>
         <div class="c-foot">
           <span class="c-time">${rel(repo.pushed_at)}</span>
-          <span class="c-tag">${tag}</span>
+          <span class="c-tag">${esc(tag)}</span>
         </div>
       </a>
     </div>`;
@@ -1043,43 +1174,50 @@ function renderCards() {
 function handleCardClick(e, name, url, desc) {
   e.preventDefault();
   if (currentMode === 'launcher') {
-    window.open(url, '_blank');
-    addRecent({name, url, desc});
+    window.open(url, '_blank', 'noopener,noreferrer');
+    addRecent({ name, url, desc });
     renderRecent();
   } else {
     openRepo(name, url, desc);
   }
 }
 
-// ── DETAIL VIEW LOGIC ──────────────────────────────────────────────────────
-
+/* ── Detail view ─────────────────────────────── */
 async function openRepo(name, url, desc) {
-  addRecent({name, url, desc});
+  addRecent({ name, url, desc });
   renderRecent();
-  
+
   document.getElementById('detRepoName').textContent = name;
   switchView('viewDetail');
-  
+
   const branchList = document.getElementById('branchList');
-  const timeline = document.getElementById('commitTimeline');
-  branchList.innerHTML = `<div class="state">fetching branches...</div>`;
-  timeline.innerHTML = `<div class="state">select a branch to see history</div>`;
+  const timeline   = document.getElementById('commitTimeline');
+  branchList.innerHTML = `<div class="state loading-anim">fetching branches</div>`;
+  timeline.innerHTML   = `<div class="state">select a branch to see history</div>`;
 
   try {
-    const res = await fetch(`https://api.github.com/repos/${USER}/${name}/branches`);
-    if (!res.ok) throw new Error('Failed to fetch branches');
+    const res     = await fetch(`https://api.github.com/repos/${USER}/${name}/branches`);
+    if (!res.ok) throw new Error(`GitHub API ${res.status}`);
     const branches = await res.json();
 
-    branchList.innerHTML = branches.map((b, i) => `
-      <div class="branch-item ${i===0?' on':''}" data-branch="${b.name}" onclick="selectBranch('${name}', '${b.name}', this)">
-        <span style="opacity:0.5">⑂</span> ${b.name}
-      </div>`).join('');
-    
-    if (branches.length > 0) {
-      selectBranch(name, branches[0].name, branchList.querySelector('.branch-item'));
+    if (!branches.length) {
+      branchList.innerHTML = `<div class="state">no branches found</div>`;
+      return;
     }
+
+    branchList.innerHTML = branches.map((b, i) => `
+      <div class="branch-item ${i === 0 ? 'on' : ''}"
+           data-branch="${esc(b.name)}"
+           role="button"
+           tabindex="0"
+           onclick="selectBranch('${esc(name)}','${esc(b.name)}',this)"
+           onkeydown="if(event.key==='Enter'||event.key===' ')selectBranch('${esc(name)}','${esc(b.name)}',this)">
+        <span aria-hidden="true" style="opacity:.5">⑂</span>${esc(b.name)}
+      </div>`).join('');
+
+    selectBranch(name, branches[0].name, branchList.querySelector('.branch-item'));
   } catch (err) {
-    branchList.innerHTML = `<div class="state">error: ${err.message}</div>`;
+    branchList.innerHTML = `<div class="state">error: ${esc(err.message)}</div>`;
   }
 }
 
@@ -1088,11 +1226,11 @@ async function selectBranch(repo, branch, el) {
   el.classList.add('on');
 
   const timeline = document.getElementById('commitTimeline');
-  timeline.innerHTML = `<div class="state">loading commits...</div>`;
+  timeline.innerHTML = `<div class="state loading-anim">loading commits</div>`;
 
   try {
-    const res = await fetch(`https://api.github.com/repos/${USER}/${repo}/commits?sha=${branch}&per_page=20`);
-    if (!res.ok) throw new Error('Failed to fetch commits');
+    const res = await fetch(`https://api.github.com/repos/${USER}/${repo}/commits?sha=${encodeURIComponent(branch)}&per_page=20`);
+    if (!res.ok) throw new Error(`GitHub API ${res.status}`);
     const commits = await res.json();
 
     if (!commits.length) {
@@ -1101,34 +1239,50 @@ async function selectBranch(repo, branch, el) {
     }
 
     timeline.innerHTML = commits.map(c => {
-      const sha = c.sha.substring(0,7);
+      const sha  = c.sha.substring(0, 7);
       const date = rel(c.commit.author.date);
-      const msg = c.commit.message;
+      const msg  = esc(c.commit.message.split('\n')[0]); // first line only
+      const full = esc(c.commit.message);
       return `
-        <div class="commit-node" onclick="this.classList.toggle('open')">
-          <div class="commit-dot"></div>
+        <div class="commit-node"
+             onclick="this.classList.toggle('open')"
+             onkeydown="if(event.key==='Enter')this.classList.toggle('open')"
+             role="button"
+             tabindex="0"
+             aria-expanded="false"
+             aria-label="${msg}">
+          <div class="commit-dot" aria-hidden="true"></div>
           <div class="commit-meta">
             <span>${sha}</span>
             <span>${date}</span>
           </div>
           <div class="commit-msg">${msg}</div>
           <div class="commit-details">
-            <strong>Author:</strong> ${c.commit.author.name} (${c.commit.author.email})<br>
-            <strong>Date:</strong> ${c.commit.author.date}<br>
-            <a href="https://github.com/${USER}/${repo}/commit/${c.sha}" target="_blank" style="color:var(--t0); text-decoration:underline; margin-top:8px; display:block">View on GitHub ↗</a>
+<strong>Author:</strong> ${esc(c.commit.author.name)} &lt;${esc(c.commit.author.email)}&gt;
+<strong>Date:</strong>   ${c.commit.author.date}
+<strong>SHA:</strong>    ${c.sha}
+<a href="https://github.com/${USER}/${repo}/commit/${c.sha}" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>
           </div>
-        </div>
-      `;
+        </div>`;
     }).join('');
+
+    // Toggle aria-expanded on click
+    timeline.querySelectorAll('.commit-node').forEach(node => {
+      node.addEventListener('click', () => {
+        node.setAttribute('aria-expanded', String(node.classList.contains('open')));
+      });
+    });
   } catch (err) {
-    timeline.innerHTML = `<div class="state">error: ${err.message}</div>`;
+    timeline.innerHTML = `<div class="state">error: ${esc(err.message)}</div>`;
   }
 }
 
-// ── FETCH ──────────────────────────────────────────────────────────────────
+/* ── Fetch all repos ─────────────────────────── */
 async function fetchAll() {
   const pip = document.getElementById('pip');
   pip.className = 'status-pip spin';
+  pip.setAttribute('aria-label', 'Loading repositories…');
+
   try {
     let page = 1, raw = [];
     while (true) {
@@ -1140,7 +1294,9 @@ async function fetchAll() {
       if (batch.length < 100) break;
       page++;
     }
-    let pagesNames = new Set();
+
+    // Get pages-enabled repos
+    const pagesNames = new Set();
     try {
       const pagesRes = await fetch(`https://api.github.com/users/${USER}/repos?per_page=100&type=public`);
       if (pagesRes.ok) {
@@ -1148,26 +1304,40 @@ async function fetchAll() {
         pd.filter(r => r.has_pages).forEach(r => pagesNames.add(r.name));
       }
     } catch {}
-    allRepos = raw.filter(r => r.has_pages || pagesNames.has(r.name) || r.name === `${USER}.github.io` || r.name.toLowerCase() === USER.toLowerCase());
+
+    allRepos = raw.filter(r =>
+      r.has_pages ||
+      pagesNames.has(r.name) ||
+      r.name === `${USER}.github.io` ||
+      r.name.toLowerCase() === USER.toLowerCase()
+    );
+    // Fallback: show all public non-fork repos
     if (allRepos.length < 2) allRepos = raw.filter(r => !r.private && !r.fork);
+
     pip.className = 'status-pip live';
-    const totalStars = allRepos.reduce((s,r) => s + r.stargazers_count, 0);
+    pip.setAttribute('aria-label', 'Repositories loaded');
+
+    const totalStars = allRepos.reduce((s, r) => s + r.stargazers_count, 0);
     document.getElementById('hs1').querySelector('.val').textContent = allRepos.length;
     document.getElementById('hs2').querySelector('.val').textContent = totalStars;
-    document.getElementById('hs3').textContent = `fetched ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+    document.getElementById('hs3').textContent =
+      `fetched ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+
     buildTags();
     renderCards();
     renderRecent();
   } catch (err) {
     pip.className = 'status-pip dead';
-    document.getElementById('cardGrid').innerHTML = `<div class="state">error: ${err.message}</div>`;
+    pip.setAttribute('aria-label', 'Error loading repositories');
+    document.getElementById('cardGrid').innerHTML =
+      `<div class="state" role="alert">error: ${esc(err.message)}</div>`;
     document.getElementById('hs3').textContent = 'fetch failed';
   }
 }
 
+/* ── Boot ────────────────────────────────────── */
 initTheme();
-document.getElementById('modeExplorer').classList.toggle('on', currentMode === 'explorer');
-document.getElementById('modeLauncher').classList.toggle('on', currentMode === 'launcher');
+setMode(currentMode);
 fetchAll();
 </script>
 </body>

@@ -1,15 +1,40 @@
 {
-  "name": "itsnotalwin Launcher",
-  "short_name": "alwin.io",
-  "start_url": ".",
+  "name": "Launchpad — itsnotalwin",
+  "short_name": "Launchpad",
+  "description": "All GitHub Pages sites in one place. Browse, explore, and launch.",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#050505",
+  "orientation": "any",
+  "categories": ["developer", "productivity"],
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.svg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Open Launcher",
+      "short_name": "Launch",
+      "description": "Go straight to the site grid",
+      "url": "/?mode=launcher",
+      "icons": [{ "src": "icon-192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
     }
   ]
 }

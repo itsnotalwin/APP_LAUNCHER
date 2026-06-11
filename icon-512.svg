@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d0d0d"/>
+      <stop offset="100%" style="stop-color:#1c1c1c"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <!-- Grid dots — 4×4 array, dim -->
+  <g fill="#2e2e2e">
+    <circle cx="152" cy="192" r="11"/>
+    <circle cx="216" cy="192" r="11"/>
+    <circle cx="280" cy="192" r="11"/>
+    <circle cx="344" cy="192" r="11"/>
+    <circle cx="152" cy="256" r="11"/>
+    <circle cx="216" cy="256" r="11"/>
+    <circle cx="280" cy="256" r="11"/>
+    <circle cx="344" cy="256" r="11"/>
+    <circle cx="152" cy="320" r="11"/>
+    <circle cx="216" cy="320" r="11"/>
+    <circle cx="280" cy="320" r="11"/>
+    <circle cx="344" cy="320" r="11"/>
+  </g>
+  <!-- Highlighted dots -->
+  <g fill="#ffffff">
+    <circle cx="216" cy="192" r="13"/>
+    <circle cx="280" cy="192" r="13"/>
+    <circle cx="216" cy="256" r="13"/>
+    <circle cx="280" cy="256" r="13"/>
+  </g>
+  <!-- Launch arrow -->
+  <g stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <line x1="304" y1="164" x2="338" y2="164"/>
+    <line x1="338" y1="164" x2="338" y2="198"/>
+    <line x1="304" y1="198" x2="338" y2="164"/>
+  </g>
+</svg>

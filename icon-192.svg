@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d0d0d"/>
+      <stop offset="100%" style="stop-color:#1a1a1a"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="192" height="192" rx="40" fill="url(#bg)"/>
+  <!-- Grid dots — 4×4 array, dim -->
+  <g fill="#2e2e2e">
+    <circle cx="56" cy="72" r="4"/>
+    <circle cx="80" cy="72" r="4"/>
+    <circle cx="104" cy="72" r="4"/>
+    <circle cx="128" cy="72" r="4"/>
+    <circle cx="56" cy="96" r="4"/>
+    <circle cx="80" cy="96" r="4"/>
+    <circle cx="104" cy="96" r="4"/>
+    <circle cx="128" cy="96" r="4"/>
+    <circle cx="56" cy="120" r="4"/>
+    <circle cx="80" cy="120" r="4"/>
+    <circle cx="104" cy="120" r="4"/>
+    <circle cx="128" cy="120" r="4"/>
+  </g>
+  <!-- Highlighted dots — active state cluster -->
+  <g fill="#ffffff">
+    <circle cx="80" cy="72" r="5"/>
+    <circle cx="104" cy="72" r="5"/>
+    <circle cx="80" cy="96" r="5"/>
+    <circle cx="104" cy="96" r="5"/>
+  </g>
+  <!-- Arrow: top-right launch indicator -->
+  <g stroke="#ffffff" stroke-width="3" stroke-linecap="round">
+    <line x1="114" y1="62" x2="126" y2="62"/>
+    <line x1="126" y1="62" x2="126" y2="74"/>
+    <line x1="114" y1="74" x2="126" y2="62"/>
+  </g>
+</svg>
