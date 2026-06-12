@@ -3,7 +3,7 @@
    Cache shell + network-first for API
 ───────────────────────────────────────── */
 const CACHE  = 'launchpad-v1';
-const SHELL  = ['/', '/index.html', '/manifest.json', '/icon-192.svg', '/icon-512.svg'];
+const SHELL  = ['./', './index.html', './manifest.json', './icon-192.svg', './icon-512.svg'];
 
 // Install: cache shell assets
 self.addEventListener('install', e => {
@@ -50,6 +50,6 @@ self.addEventListener('fetch', e => {
         }
         return res;
       }))
-      .catch(() => caches.match('/index.html'))
+      .catch(() => caches.match('./index.html'))
   );
 });

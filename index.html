@@ -935,7 +935,7 @@ function closePWA() {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {/* silently ignore in dev */});
+    navigator.serviceWorker.register('./sw.js').catch(() => {/* silently ignore in dev */});
   });
 }
 

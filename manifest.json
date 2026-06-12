@@ -2,7 +2,7 @@
   "name": "Launchpad — itsnotalwin",
   "short_name": "Launchpad",
   "description": "All GitHub Pages sites in one place. Browse, explore, and launch.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#050505",
@@ -33,7 +33,7 @@
       "name": "Open Launcher",
       "short_name": "Launch",
       "description": "Go straight to the site grid",
-      "url": "/?mode=launcher",
+      "url": "./?mode=launcher",
       "icons": [{ "src": "icon-192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
     }
   ]
