@@ -147,6 +147,43 @@ body {
 .topbar-brand:hover { color: var(--t0); }
 .topbar-brand span  { color: var(--t3); }
 
+/* Profile Switcher */
+.profile-switcher {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.profile-btn {
+  background: var(--s1);
+  border: 1px solid var(--b0);
+  color: var(--t2);
+  font-family: var(--f);
+  font-size: 10px;
+  letter-spacing: .04em;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  border-radius: 2px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.profile-btn:hover { border-color: var(--b1); color: var(--t1); }
+.profile-btn.active {
+  background: var(--t0);
+  color: var(--bg);
+  border-color: var(--t0);
+  font-weight: 500;
+}
+
+.profile-divider {
+  color: var(--t3);
+  font-size: 9px;
+  padding: 0 2px;
+  user-select: none;
+}
+
 /* Word-mark badge */
 .topbar-badge {
   font-size: 8px;
@@ -734,6 +771,7 @@ body {
   .timeline { padding-left: 24px; }
 
   .topbar-right .sort-pill:not([data-sort]) { display: none; }
+  .profile-btn { font-size: 9px; padding: 3px 8px; }
 
   #pwaPopup { width: calc(100% - 32px); left: 16px; right: 16px; bottom: 16px; }
 }
@@ -746,6 +784,9 @@ body {
   .topbar-right > *:not(.theme-toggle):not(.status-pip):not([data-sort="name"]) {
     display: none;
   }
+  .profile-switcher { gap: 2px; }
+  .profile-btn { font-size: 8px; padding: 2px 6px; }
+  .profile-divider { font-size: 7px; padding: 0 1px; }
 }
   </style>
 </head>
@@ -758,7 +799,19 @@ body {
   <button class="topbar-brand" onclick="goHome()" aria-label="Go to home">
     launchpad<span>.io</span>
   </button>
-  <span class="topbar-badge" aria-hidden="true">itsnotalwin</span>
+  
+  <!-- Profile Switcher -->
+  <div class="profile-switcher" role="group" aria-label="Switch GitHub profile">
+    <button class="profile-btn active" data-profile="itsnotalwin" onclick="switchProfile('itsnotalwin')" aria-pressed="true">
+      itsnotalwin
+    </button>
+    <span class="profile-divider" aria-hidden="true">/</span>
+    <button class="profile-btn" data-profile="alwinnewman97-hue" onclick="switchProfile('alwinnewman97-hue')" aria-pressed="false">
+      alwinnewman97
+    </button>
+  </div>
+
+  <span class="topbar-badge" id="topbarBadge" aria-hidden="true">itsnotalwin</span>
 
   <div class="topbar-search" role="search">
     <span class="search-icon" aria-hidden="true">/</span>
@@ -793,7 +846,7 @@ body {
 <main id="viewLauncher" class="view active" aria-label="Project launcher">
 
   <div class="hero" aria-labelledby="heroTitle">
-    <p class="hero-kicker">github pages launcher</p>
+    <p class="hero-kicker" id="heroKicker">github pages launcher</p>
     <h1 class="hero-h1" id="heroTitle">all sites<span class="muted">, one place.</span></h1>
     <div class="hero-stats" role="status" aria-live="polite">
       <span class="hstat" id="hs1"><b class="val" aria-label="Site count">—</b> sites</span>
@@ -835,7 +888,7 @@ body {
     </div>
 
     <footer class="foot" role="contentinfo">
-      <span>launchpad — itsnotalwin</span>
+      <span id="footL">launchpad — itsnotalwin</span>
       <span id="footR"></span>
     </footer>
   </div>
@@ -891,18 +944,23 @@ body {
 'use strict';
 
 /* ── Constants ─────────────────────────────── */
-const USER      = 'itsnotalwin';
-const LS_RECENT = 'alw3_recent';
+const PROFILES = ['itsnotalwin', 'alwinnewman97-hue'];
+const LS_USER      = 'alw3_user';
+const LS_RECENT_BASE = 'alw3_recent'; // will be suffixed with profile
 const LS_SORT   = 'alw3_sort';
 const LS_TAG    = 'alw3_tag';
 const LS_THEME  = 'alw3_theme';
 const LS_MODE   = 'alw3_mode';
 
 /* ── State ──────────────────────────────────── */
+let currentUser = localStorage.getItem(LS_USER) || 'itsnotalwin';
 let currentMode = localStorage.getItem(LS_MODE) || 'explorer';
 let sortMode    = localStorage.getItem(LS_SORT)  || 'name';
 let activeTag   = localStorage.getItem(LS_TAG)   || 'all';
 let allRepos    = [];
+
+// Get profile-specific localStorage keys
+function getRecentKey() { return `${LS_RECENT_BASE}_${currentUser}`; }
 
 /* ── Scroll shadow on topbar ────────────────── */
 window.addEventListener('scroll', () => {
@@ -937,6 +995,45 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(() => {/* silently ignore in dev */});
   });
+}
+
+/* ── Profile Switcher ────────────────────────── */
+function switchProfile(username) {
+  if (currentUser === username) return;
+  
+  currentUser = username;
+  localStorage.setItem(LS_USER, currentUser);
+  
+  // Update profile buttons
+  document.querySelectorAll('.profile-btn').forEach(btn => {
+    const isActive = btn.dataset.profile === currentUser;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', String(isActive));
+  });
+  
+  // Update badge
+  document.getElementById('topbarBadge').textContent = currentUser;
+  
+  // Update hero and footer
+  document.getElementById('heroKicker').textContent = `${currentUser} pages launcher`;
+  document.getElementById('footL').textContent = `launchpad — ${currentUser}`;
+  
+  // Reset search
+  document.getElementById('searchInput').value = '';
+  
+  // Refresh repos for new profile
+  fetchAll();
+}
+
+function initProfileUI() {
+  document.querySelectorAll('.profile-btn').forEach(btn => {
+    const isActive = btn.dataset.profile === currentUser;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', String(isActive));
+  });
+  document.getElementById('topbarBadge').textContent = currentUser;
+  document.getElementById('heroKicker').textContent = `${currentUser} pages launcher`;
+  document.getElementById('footL').textContent = `launchpad — ${currentUser}`;
 }
 
 /* ── Theme ───────────────────────────────────── */
@@ -1049,12 +1146,12 @@ function esc(s) { return String(s).replace(/"/g, '&quot;').replace(/</g,'&lt;').
 
 /* ── Recent ──────────────────────────────────── */
 function getRecent() {
-  try { return JSON.parse(localStorage.getItem(LS_RECENT) || '[]'); } catch { return []; }
+  try { return JSON.parse(localStorage.getItem(getRecentKey()) || '[]'); } catch { return []; }
 }
 function addRecent(r) {
   const list = getRecent().filter(x => x.name !== r.name);
   list.unshift(r);
-  try { localStorage.setItem(LS_RECENT, JSON.stringify(list.slice(0, 3))); } catch {}
+  try { localStorage.setItem(getRecentKey(), JSON.stringify(list.slice(0, 3))); } catch {}
 }
 function renderRecent() {
   const list = getRecent();
@@ -1146,7 +1243,7 @@ function renderCards() {
   }
 
   grid.innerHTML = list.map((repo, i) => {
-    const url   = `https://${USER}.github.io/${repo.name}/`;
+    const url   = `https://${currentUser}.github.io/${repo.name}/`;
     const desc  = describe(repo.name);
     const tag   = getTag(repo.name);
     const stars = repo.stargazers_count || 0;
@@ -1196,7 +1293,7 @@ async function openRepo(name, url, desc) {
   timeline.innerHTML   = `<div class="state">select a branch to see history</div>`;
 
   try {
-    const res     = await fetch(`https://api.github.com/repos/${USER}/${name}/branches`);
+    const res     = await fetch(`https://api.github.com/repos/${currentUser}/${name}/branches`);
     if (!res.ok) throw new Error(`GitHub API ${res.status}`);
     const branches = await res.json();
 
@@ -1229,7 +1326,7 @@ async function selectBranch(repo, branch, el) {
   timeline.innerHTML = `<div class="state loading-anim">loading commits</div>`;
 
   try {
-    const res = await fetch(`https://api.github.com/repos/${USER}/${repo}/commits?sha=${encodeURIComponent(branch)}&per_page=20`);
+    const res = await fetch(`https://api.github.com/repos/${currentUser}/${repo}/commits?sha=${encodeURIComponent(branch)}&per_page=20`);
     if (!res.ok) throw new Error(`GitHub API ${res.status}`);
     const commits = await res.json();
 
@@ -1261,7 +1358,7 @@ async function selectBranch(repo, branch, el) {
 <strong>Author:</strong> ${esc(c.commit.author.name)} &lt;${esc(c.commit.author.email)}&gt;
 <strong>Date:</strong>   ${c.commit.author.date}
 <strong>SHA:</strong>    ${c.sha}
-<a href="https://github.com/${USER}/${repo}/commit/${c.sha}" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>
+<a href="https://github.com/${currentUser}/${repo}/commit/${c.sha}" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>
           </div>
         </div>`;
     }).join('');
@@ -1286,7 +1383,7 @@ async function fetchAll() {
   try {
     let page = 1, raw = [];
     while (true) {
-      const res = await fetch(`https://api.github.com/users/${USER}/repos?per_page=100&page=${page}&sort=pushed`);
+      const res = await fetch(`https://api.github.com/users/${currentUser}/repos?per_page=100&page=${page}&sort=pushed`);
       if (!res.ok) throw new Error(`GitHub API ${res.status}`);
       const batch = await res.json();
       if (!batch.length) break;
@@ -1298,7 +1395,7 @@ async function fetchAll() {
     // Get pages-enabled repos
     const pagesNames = new Set();
     try {
-      const pagesRes = await fetch(`https://api.github.com/users/${USER}/repos?per_page=100&type=public`);
+      const pagesRes = await fetch(`https://api.github.com/users/${currentUser}/repos?per_page=100&type=public`);
       if (pagesRes.ok) {
         const pd = await pagesRes.json();
         pd.filter(r => r.has_pages).forEach(r => pagesNames.add(r.name));
@@ -1308,8 +1405,8 @@ async function fetchAll() {
     allRepos = raw.filter(r =>
       r.has_pages ||
       pagesNames.has(r.name) ||
-      r.name === `${USER}.github.io` ||
-      r.name.toLowerCase() === USER.toLowerCase()
+      r.name === `${currentUser}.github.io` ||
+      r.name.toLowerCase() === currentUser.toLowerCase()
     );
     // Fallback: show all public non-fork repos
     if (allRepos.length < 2) allRepos = raw.filter(r => !r.private && !r.fork);
@@ -1337,6 +1434,7 @@ async function fetchAll() {
 
 /* ── Boot ────────────────────────────────────── */
 initTheme();
+initProfileUI();
 setMode(currentMode);
 fetchAll();
 </script>
