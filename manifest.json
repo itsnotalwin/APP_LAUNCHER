@@ -2,7 +2,7 @@
   "name": "Launchpad — itsnotalwin",
   "short_name": "Launchpad",
   "description": "All GitHub Pages sites in one place. Browse, explore, and launch.",
-  "start_url": "APP_LAUNCHER/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#050505",
