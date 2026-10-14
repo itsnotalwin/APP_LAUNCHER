@@ -2,7 +2,7 @@
    Launchpad — Service Worker v1.0
    Cache shell + network-first for API
 ───────────────────────────────────────── */
-const CACHE  = 'launchpad-v1';
+const CACHE  = 'launchpad-v2';
 const SHELL  = ['./', './index.html', './manifest.json', './icon-192.svg', './icon-512.svg'];
 
 // Install: cache shell assets
