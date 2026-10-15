@@ -2,8 +2,8 @@
    Launchpad — Service Worker v1.0
    Cache shell + network-first for API
 ───────────────────────────────────────── */
-const CACHE  = 'launchpad-v1';
-const SHELL  = ['./', './index.html', './manifest.json', './icon-192.svg', './icon-512.svg'];
+const CACHE  = 'launchpad-v3';
+const SHELL  = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './assets/blob-hero.webp', './assets/blob-detail.webp'];
 
 // Install: cache shell assets
 self.addEventListener('install', e => {
